@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    {% if title %}
+        <title>PlatypOS - {{ title }}</title>
+    {% else %}
+        <title>PlatypOS</title>
+    {% endif %}
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/"><b>Home</b></a></li>
+                <li><a href="/voli"><b>Voli</b></a></li>
+                <li><a href="/notizie"><b>Notizie</b></a></li>
+                <li><a href="/contatti"><b>Contatti</b></a></li>
+                <li><a href="/account"><b>Account</b></a></li>
+            </ul>
+        </nav>
+        <div style="padding-top: 50px;"></div><!--Hack brutto per non avere sovrapposizione con la nav-->
+        {% block contenuto %}
+        {% endblock contenuto %}
+    </header>
+</body>
+</html>
