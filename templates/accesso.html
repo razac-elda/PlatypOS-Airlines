@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+    {% if new_user %}
+        <h3>Credenziali errate</h3>
+    {% endif %}
+    <h3>Login</h3>
+    <form action="/profilo/login" method="POST">
+        <label>
+            Nome utente <input name="user" type="text">
+        </label>
+        <input value="Login" type="submit">
+    </form>
+    <h3>Registrazione</h3>
+    <form action="/profilo/register" method="POST">
+        <label>
+            Nome utente <input name="user" type="text">
+        </label>
+        <input value="Login" type="submit">
+    </form>
+{% endblock contenuto %}

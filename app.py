@@ -1,9 +1,12 @@
 from flask import Flask, render_template
+from account import account
 
 app = Flask(__name__)
+app.register_blueprint(account, url_prefix="/profilo")
 
 
 @app.route('/')
+@app.route('/home')
 def home():
     return render_template('home.html')
 
@@ -21,8 +24,3 @@ def notizie():
 @app.route('/contatti')
 def contatti():
     return render_template('contatti.html', title='Contatti')
-
-
-@app.route('/account')
-def account():
-    return render_template('account.html', title='Account')
