@@ -5,16 +5,16 @@ account = Blueprint('account', __name__, template_folder='templates', static_fol
 
 @account.route('/')
 def access():
-    return render_template('accesso.html', title='Profilo')
+    return render_template('accesso.html', title='Profilo', active_menu=4)
 
 
 @account.route('/<username>')
 def user_profile(username):
     users = ['leo']  # DB
     if username in users:
-        return render_template('profilo.html', title='Profilo', user=username)
+        return render_template('profilo.html', title='Profilo', active_menu=4, user=username)
     else:
-        return render_template('accesso.html', title='Profilo', new_user=1)
+        return render_template('accesso.html', title='Profilo', active_menu=4, new_user=1)
 
 
 @account.route('/login', methods=['GET', 'POST'])
