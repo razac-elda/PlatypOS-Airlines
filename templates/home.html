@@ -1,5 +1,63 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-    <h1>PlatypOS</h1>
-    <h1>Hello world</h1
+    <script type="text/javascript">
+        $('.datepicker').datepicker();
+    </script>
+    <div class="container" style="margin-top: 50px">
+        <div class="card">
+            <h5 class="card-header">
+                Dove vuoi andare?
+            </h5>
+            <div class="card-body">
+                <form>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="FromInput">Da</label>
+                                <input type="text" class="form-control" id="FromInput" placeholder="Nazione o città">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="ToInput">A</label>
+                                <input type="text" class="form-control" id="ToInput" placeholder="Nazione o città">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flight_type" id="OnewayRadioInput" value="oneway" checked>
+                                <label class="form-check-label" for="OnewayRadioInput">Andata</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flight_type" id="RoundtripRadioInput" value="roundtrip">
+                                <label class="form-check-label" for="RoundtripRadioInput">Andata e ritorno</label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group input-daterange" data-provide="datepicker">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="DateStart">Partenza</label>
+                                        <input type="text" class="form-control" id="DateStart">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="DateEnd">Ritorno</label>
+                                        <input type="text" class="form-control" id="DateEnd">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary">Cerca</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock contenuto %}
