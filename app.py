@@ -2,7 +2,7 @@ from flask import Flask, render_template
 from account import account
 
 app = Flask(__name__)
-app.register_blueprint(account, url_prefix="/profilo")
+app.register_blueprint(account, url_prefix="/utenti")
 
 
 @app.route('/')

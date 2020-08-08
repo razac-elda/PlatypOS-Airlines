@@ -12,63 +12,71 @@
             });
         });
     </script>
-    <div class="container" style="margin-top: 50px">
-        <div class="card">
-            <h5 class="card-header">
-                Dove vuoi andare?
-            </h5>
-            <div class="card-body">
-                <form>
+    <div class="card">
+        <h5 class="card-header">
+            Dove vuoi andare?
+        </h5>
+        <div class="card-body">
+            <form>
+                <div class="container">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-sm">
                             <div class="form-group">
                                 <label for="FromInput">Da</label>
-                                <input type="text" class="form-control" id="FromInput" placeholder="Nazione o città">
+                                <input type="text" class="form-control" id="FromInput" placeholder="Nazione o città"
+                                       name="fly_from" required>
                             </div>
                         </div>
-                        <div class="col">
+                        <div class="col-sm">
                             <div class="form-group">
                                 <label for="ToInput">A</label>
-                                <input type="text" class="form-control" id="ToInput" placeholder="Nazione o città">
+                                <input type="text" class="form-control" id="ToInput" placeholder="Nazione o città"
+                                       name="fly_to" required>
                             </div>
                         </div>
-
                     </div>
                     <div class="row">
-                        <div class="col">
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flight_type" id="OnewayRadioInput"
-                                       value="oneway" checked>
-                                <label class="form-check-label" for="OnewayRadioInput">Andata</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flight_type" id="RoundtripRadioInput"
-                                       value="roundtrip">
-                                <label class="form-check-label" for="RoundtripRadioInput">Andata e ritorno</label>
+                        <div class="col-sm">
+                            <label>Tipo di viaggio</label>
+                            <div class="col-sm">
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="OnewayRadioInput" name="flight_type"
+                                           class="custom-control-input" checked>
+                                    <label class="custom-control-label" for="OnewayRadioInput">Andata</label>
+                                </div>
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    <input type="radio" id="RoundtripRadioInput" name="flight_type"
+                                           class="custom-control-input">
+                                    <label class="custom-control-label" for="RoundtripRadioInput">Andata e
+                                        ritorno</label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="row">
-                                <div class="col">
-                                    <label for="DateStart">Partenza</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="DateStart" data-provide="datepicker"
-                                               data-date-format="dd/mm/yy">
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <label for="DateEnd">Ritorno</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" id="DateEnd" data-provide="datepicker"
-                                               data-date-format="dd/mm/yy" disabled>
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Cerca</button>
+                        <div class="col-sm">
+                            <label for="DateStart">Partenza</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="DateStart" data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_dep_date" required>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="DateEnd">Ritorno</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="DateEnd" data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_return_date"
+                                       disabled>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="row row-space">
+                        <div class="col-sm">
+                            <button type="submit" class="btn btn-warning btn-block rounded-pill">Cerca</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </form>
         </div>
     </div>
 

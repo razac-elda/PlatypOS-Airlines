@@ -12,7 +12,7 @@
           integrity="sha512-mSYUmp1HYZDFaVKK//63EcZq4iFWFjxSL+Z3T/aCt4IO9Cejm03q3NKKYN6pFQzY0SBOr8h+eCIAZHPXcpZaNw=="
           crossorigin="anonymous"/>
     <!-- Custom CSS -->
-    <link rel="stylesheet" type="text/css" href="/static/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
     {% if title %}
         <title>PlatypOS - {{ title }}</title>
     {% else %}
@@ -21,7 +21,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
         <a class="navbar-brand" href="/">PlatypOS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,17 +41,21 @@
                 <li class="nav-item {% if active_menu == 3 %} active {% endif %}">
                     <a class="nav-link" href="/contatti">Contatti</a>
                 </li>
-                <li class="nav-item {% if active_menu == 4 %} active {% endif %}">
-                    <a class="nav-link" href="/profilo">Profilo</a>
-                </li>
             </ul>
-            <span class="navbar-text">
-                        Accesso non effettuato
-                    </span>
+            <div class="btn-group">
+                <a href="/utenti/accesso" class="btn btn-warning">Accedi / Registrati</a>
+            </div>
         </div>
     </nav>
-    {% block contenuto %}
-    {% endblock contenuto %}
+    <main role="main" class="container">
+        {% block contenuto %}
+        {% endblock contenuto %}
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <span class="text-muted">PlatypOS airlines</span>
+        </div>
+    </footer>
     <!-- Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
             integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -66,6 +70,5 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"
             integrity="sha512-T/tUfKSV1bihCnd+MxKD0Hm1uBBroVYBOYSk1knyvQ9VyZJpc/ALb4P0r6ubwVPSGB2GvjeoMAJJImBG12TiaQ=="
             crossorigin="anonymous"></script>
-
 </body>
 </html>
