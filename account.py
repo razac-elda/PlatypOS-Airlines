@@ -4,26 +4,27 @@ account = Blueprint('account', __name__, template_folder='templates', static_fol
 
 
 @account.route('/')
-@account.route('/accesso')
+@account.route('/autenticazione')
 def access():
-    return render_template('accesso.html', title='Accedi / Registrati')
+    return render_template('autenticazione.html', title='Accedi / Registrati')
 
 
-@account.route('/<username>')
-def user_profile(username):
-    users = ['leo']  # DB
-    if username in users:
-        return render_template('profilo.html', title='Profilo', user=username)
+@account.route('/<email>')
+def user_profile(email):
+    emails = ['leo@leo']  # DB
+    if email in emails:
+        return render_template('profilo.html', title='Profilo', user=email)
     else:
-        return render_template('accesso.html', title='Profilo', new_user=1)
+        return render_template('autenticazione.html', title='Profilo', new_user=1)
 
 
-@account.route('/login', methods=['GET', 'POST'])
+@account.route('/accesso', methods=['GET', 'POST'])
 def form_login():
-    user = request.form["user"]
-    return redirect(url_for('account.user_profile', username=user))
+    email = request.form["user"]
+    password = request.form["pass"]
+    return redirect(url_for('account.user_profile', email=email))
 
 
-@account.route('/register', methods=['GET', 'POST'])
+@account.route('/registrazione', methods=['GET', 'POST'])
 def form_register():
     return redirect(url_for('account.access'))

@@ -1,0 +1,106 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+    <div class="row">
+        <div class="col-sm">
+            <!-- Form accesso -->
+            <div class="card row-space">
+                <h5 class="card-header">
+                    Accesso
+                </h5>
+                <div class="card-body">
+                    <form action="/utenti/accesso" method="post">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email"
+                                               placeholder="E-mail"
+                                               name="user" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password"
+                                               placeholder="Password"
+                                               name="pass" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-sm">
+                                    <button type="submit" class="btn btn-warning btn-block rounded-pill">Accedi</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm">
+            <!-- Form registrazione -->
+            <div class="card row-space">
+                <h5 class="card-header">
+                    Registrazione
+                </h5>
+                <div class="card-body">
+                    <form action="/utenti/registrazione" method="post">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="name">Nome</label>
+                                        <input type="text" class="form-control" id="name"
+                                               placeholder="Nome"
+                                               name="new_name" required>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="surname">Cognome</label>
+                                        <input type="text" class="form-control" id="surname"
+                                               placeholder="Cognome"
+                                               name="new_surname" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="new_email">Email</label>
+                                        <input type="email" class="form-control" id="new_email"
+                                               placeholder="E-mail"
+                                               name="new_email" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" id="password"
+                                               placeholder="Password"
+                                               name="pass" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row row-space">
+                                <div class="col-sm">
+                                    <button type="submit" class="btn btn-warning btn-block rounded-pill">Registrati
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock contenuto %}
+
+
+
+

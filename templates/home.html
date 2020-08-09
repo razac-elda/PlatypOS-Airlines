@@ -2,22 +2,22 @@
 {% block contenuto %}
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
+            <!-- Script per disabilitare calendario -->
             $("#RoundtripRadioInput").click(function () {
                 $("#DateEnd").attr("disabled", false);
-                //$("#discountselection").show(); //To Show the dropdown
             });
             $("#OnewayRadioInput").click(function () {
                 $("#DateEnd").attr("disabled", true);
-                //$("#discountselection").hide();//To hide the dropdown
             });
         });
     </script>
+    <!-- Form ricerca voli -->
     <div class="card">
         <h5 class="card-header">
             Dove vuoi andare?
         </h5>
         <div class="card-body">
-            <form>
+            <form action="/">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
@@ -56,7 +56,8 @@
                             <label for="DateStart">Partenza</label>
                             <div class="input-group">
                                 <input type="text" class="form-control" id="DateStart" data-provide="datepicker"
-                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_dep_date" required>
+                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_dep_date"
+                                       required>
                             </div>
                         </div>
                         <div class="col-sm">
@@ -74,10 +75,7 @@
                         </div>
                     </div>
                 </div>
-
-
             </form>
         </div>
     </div>
-
 {% endblock contenuto %}
