@@ -1,9 +1,13 @@
-from flask import Flask, render_template
-from account import account
+from platypos import app
+from flask import render_template
+from platypos.account import account
 
-app = Flask(__name__)
+# from platypos.models import User
+
 app.register_blueprint(account, url_prefix="/utenti")
 
+
+# Ogni route sarebbe da mettere in una dedicata blueprint
 
 @app.route('/')
 @app.route('/home')

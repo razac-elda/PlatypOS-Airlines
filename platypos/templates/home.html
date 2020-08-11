@@ -1,16 +1,7 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            <!-- Script per disabilitare calendario -->
-            $("#RoundtripRadioInput").click(function () {
-                $("#DateEnd").attr("disabled", false);
-            });
-            $("#OnewayRadioInput").click(function () {
-                $("#DateEnd").attr("disabled", true);
-            });
-        });
-    </script>
+    <!-- Script per disabilitare calendario -->
+    <script src="{{ url_for('static', filename='js/datepicker_enabled_disabled.js') }}"></script>
     <!-- Form ricerca voli -->
     <div class="card">
         <h5 class="card-header">
