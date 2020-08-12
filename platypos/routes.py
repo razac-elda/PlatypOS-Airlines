@@ -2,8 +2,6 @@ from platypos import app
 from flask import render_template
 from platypos.account import account
 
-# from platypos.models import User
-
 app.register_blueprint(account, url_prefix="/utenti")
 
 
