@@ -10,6 +10,12 @@ def access():
     return render_template('autenticazione.html', title='Accedi / Registrati')
 
 
+
+@account.route('/autenticazioneErrore')
+def error():
+    return render_template('autenticazione.html', title='Accedi / Registrati')
+
+
 @account.route('/<user>')
 def user_profile(user):
     return render_template('autenticazione.html', title='Profilo', new_user=1)
