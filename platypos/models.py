@@ -14,9 +14,8 @@ engine = create_engine(uri, echo=True)
 
 metadata = MetaData()
 
-# Dichiarare le tabelle cosi, cercatevi i parametri
 users = Table('users', metadata,
-              Column('id', Integer, primary_key=True),
+              Column('userId', Integer, primary_key=True),
               Column('email', String(254), unique=True, nullable=False),
               Column('password', String(128), nullable=False),
               Column('name', String(255), nullable=False),
@@ -24,32 +23,38 @@ users = Table('users', metadata,
               )
 
 airports = Table('airports', metadata,
-                 Column('id', Integer, primary_key=True),
-                 Column('city', String(255)),
-                 Column('country', String(255)),
-                 Column('name', String(255)),
+                 Column('airportId', Integer, primary_key=True),
+                 Column('name', String(255), nullable=False),
+                 Column('city', String(255), nullable=False),
+                 Column('country', String(255), nullable=False),
                  )
 
 airplanes = Table('airplanes', metadata,
                   Column('planeCode', Integer, primary_key=True),
-                  Column('aviableSeats', Integer),
+                  Column('name', String(255), nullable=False),
+                  Column('seats', Integer, nullable=False),
                   )
 
+# Date -> Postgres Date
+# DateTime -> Postgres Timestamp without timezone
+# Da scoprire cosa si puo inserire veramente
 flights = Table('flights', metadata,
                 Column('flightCode', Integer, primary_key=True),
-                Column('departureTime', TIMESTAMP),
-                Column('arrivalTime', TIMESTAMP),
-                Column('departureAirport', String(255), ForeignKey(airports.id)),
-                Column('arrivalAirport', String(255), ForeignKey(airports.id)),
-                Column('planeCode', Integer, ForeignKey(airplanes.planeCode)),
+                Column('departureDate', Date, nullable=False),
+                Column('departureTime', DateTime, nullable=False),
+                Column('arrivalDate', Date, nullable=False),
+                Column('arrivalTime', DateTime, nullable=False),
+                Column('departureAirport', Integer, ForeignKey('airports.airportId')),
+                Column('arrivalAirport', Integer, ForeignKey('airports.airportId')),
+                Column('planeCode', Integer, ForeignKey('airplanes.planeCode')),
                 )
 
-book = Table('book', metadata,
-             Column('flightCode', Integer, ForeignKey(flights.flightCode)),
-             Column('seat', Integer, ),
-             Column('idUser', Integer, ForeignKey('users.id')),
-             Column('idBook', Integer, primary_key=True),
-             )
+bookings = Table('bookings', metadata,
+                 Column('bookingId', Integer, primary_key=True),
+                 Column('seatNumber', Integer, nullable=False),
+                 Column('userId', Integer, ForeignKey('users.userId')),
+                 Column('flightCode', Integer, ForeignKey('flights.flightCode')),
+                 )
 
 metadata.create_all(engine)
 connection = engine.connect()
