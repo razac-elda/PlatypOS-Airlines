@@ -8,21 +8,21 @@
             Dove vuoi andare?
         </h5>
         <div class="card-body">
-            <form action="/">
+            <form action="/result" method="post">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="FromInput">Da</label>
                                 <input type="text" class="form-control" id="FromInput" placeholder="Nazione o città"
-                                       name="fly_from" required>
+                                       name="fly_from" required list="airport">
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="ToInput">A</label>
                                 <input type="text" class="form-control" id="ToInput" placeholder="Nazione o città"
-                                       name="fly_to" required>
+                                       name="fly_to" required list="airport">
                             </div>
                         </div>
                     </div>
@@ -69,4 +69,13 @@
             </form>
         </div>
     </div>
+
+        {% if answer %}
+            <datalist id="airport">
+            {%  for row in answer %}
+             <option value="{{ row['name'] }}"></option>
+            {% endfor %}
+            </datalist>
+        {% endif %}
+
 {% endblock contenuto %}

@@ -1,14 +1,10 @@
 from sqlalchemy import *
 
-# Scegliere il db da usare, ci sono cose che funzionano diversamente tra i db
-
-# La password è quella che chiede quando si installa postgres, mettere "passwordsupersegreta" per facilitare lo sviluppo
-# "platypos_airlines" è il nome del db da creare da shell o pgadmin4
-# Da fare: pip install psycopg2
-uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/test'
+#
+uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
 engine = create_engine(uri, echo=True)
 
-# Per TESTARE in memoria con SQLite, serve il parametro check_same_thread
+
 # uri = 'sqlite:///:memory:'
 # engine = create_engine(uri, echo=True, connect_args={"check_same_thread": False})
 
@@ -31,7 +27,6 @@ airports = Table('airports', metadata,
 
 airplanes = Table('airplanes', metadata,
                   Column('planeCode', Integer, primary_key=True),
-                  Column('name', String(255), nullable=False),
                   Column('seats', Integer, nullable=False),
                   )
 
@@ -40,9 +35,7 @@ airplanes = Table('airplanes', metadata,
 # Da scoprire cosa si puo inserire veramente
 flights = Table('flights', metadata,
                 Column('flightCode', Integer, primary_key=True),
-                Column('departureDate', Date, nullable=False),
                 Column('departureTime', DateTime, nullable=False),
-                Column('arrivalDate', Date, nullable=False),
                 Column('arrivalTime', DateTime, nullable=False),
                 Column('departureAirport', Integer, ForeignKey('airports.airportId')),
                 Column('arrivalAirport', Integer, ForeignKey('airports.airportId')),
