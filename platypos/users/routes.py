@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from platypos.models import connection, users
+from platypos.models import *
 
 users_account = Blueprint('users_account', __name__, template_folder='templates', static_folder='static')
 
@@ -27,8 +27,10 @@ def form_register():
     surname = request.form['new_surname']
     email = request.form['new_email']
     password = request.form['new_pass']
+    connection = engine.connect()
     ins = users.insert()
     connection.execute(ins, email=email, password=password, name=name, surname=surname)
+    connection.close()
     account_error = 'none'
     # I risultati li potete leggere dalla console
     if account_error == 'email':

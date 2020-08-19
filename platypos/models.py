@@ -1,6 +1,5 @@
 from sqlalchemy import *
 
-#
 uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
 engine = create_engine(uri, echo=True)
 
@@ -50,4 +49,3 @@ bookings = Table('bookings', metadata,
                  )
 
 metadata.create_all(engine)
-connection = engine.connect()

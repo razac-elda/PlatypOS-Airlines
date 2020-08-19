@@ -8,21 +8,21 @@
             Dove vuoi andare?
         </h5>
         <div class="card-body">
-            <form action="/result" method="post">
+            <form action="/result" method="get">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="FromInput">Da</label>
-                                <input type="text" class="form-control" id="FromInput" placeholder="Nazione o città"
-                                       name="fly_from" required list="airport">
+                                <input type="text" class="form-control" id="FromInput" placeholder="Città"
+                                       name="fly_from" list="airport" required>
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="ToInput">A</label>
-                                <input type="text" class="form-control" id="ToInput" placeholder="Nazione o città"
-                                       name="fly_to" required list="airport">
+                                <input type="text" class="form-control" id="ToInput" placeholder="Città"
+                                       name="fly_to" list="airport" required>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             <div class="input-group">
                                 <input type="text" class="form-control" id="DateEnd" data-provide="datepicker"
                                        data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_return_date"
-                                       disabled>
+                                       required disabled>
                             </div>
                         </div>
                     </div>
@@ -70,12 +70,12 @@
         </div>
     </div>
 
-        {% if answer %}
-            <datalist id="airport">
-            {%  for row in answer %}
-             <option value="{{ row['name'] }}"></option>
+    {% if answer %}
+        <datalist id="airport">
+            {% for row in answer %}
+                <option value="{{ row['city'] }}"></option>
             {% endfor %}
-            </datalist>
-        {% endif %}
+        </datalist>
+    {% endif %}
 
 {% endblock contenuto %}
