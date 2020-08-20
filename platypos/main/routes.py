@@ -24,12 +24,18 @@ def search_results():
     flyDepDate = request.form['fly_dep_date']
     flyReturnDate = request.form['fly_return_date']
     return render_template('home.html', active_menu=0)
-"""
+
+'''
     connection = engine.connect();
     if flyType == 'fromOnly':
-        s = text ( "SELECT a1.name , a2.name , f.departureTime , f.flightCode FROM flighs JOIN  airports a1 ON f.departureAirport = a1.airportId JOIN airports a2 ON a2.airportId = f.arrivalAirporta")
-        connection.execute(s)
-    #elif flyType == 'fromTo':
-connection.close();
-"""
+        s = text (
+            " SELECT a1.name , a2.name , f.departureTime , f.flightCode "
+            "FROM flighs JOIN  airports a1 ON f.departureAirport = a1.airportId JOIN airports a2 ON a2.airportId = f.arrivalAirporta "
+            "WHERE a1.name = flyFrom AND flyTo = a2.name AND flyType = fromOnly"  
+        )
+        results = connection.execute(s)
+        connection.close();
+
+    return render_template('home.html', active_menu=0, resultsFlights=results)
+'''
 
