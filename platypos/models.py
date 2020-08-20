@@ -3,10 +3,6 @@ from sqlalchemy import *
 uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
 engine = create_engine(uri, echo=True)
 
-
-# uri = 'sqlite:///:memory:'
-# engine = create_engine(uri, echo=True, connect_args={"check_same_thread": False})
-
 metadata = MetaData()
 
 users = Table('users', metadata,
@@ -29,9 +25,6 @@ airplanes = Table('airplanes', metadata,
                   Column('seats', Integer, nullable=False),
                   )
 
-# Date -> Postgres Date
-# DateTime -> Postgres Timestamp without timezone
-# Da scoprire cosa si puo inserire veramente
 flights = Table('flights', metadata,
                 Column('flight_code', Integer, primary_key=True),
                 Column('departure_time', DateTime, nullable=False),
