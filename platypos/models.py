@@ -21,7 +21,7 @@ airports = Table('airports', metadata,
                  Column('airportId', Integer, primary_key=True),
                  Column('name', String(255), nullable=False),
                  Column('city', String(255), nullable=False),
-                 Column('country', String(255), nullable=False),
+                 Column('province', String(255), nullable=False),
                  )
 
 airplanes = Table('airplanes', metadata,
