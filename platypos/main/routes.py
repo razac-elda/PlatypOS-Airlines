@@ -7,10 +7,10 @@ main = Blueprint('main', __name__, template_folder='templates', static_folder='s
 @main.route('/')
 @main.route('/home')
 def homepage():
-    connection = engine.connect();
-    results = connection.execute(select([airports.c.city]). \
-                                 group_by(airports.c.city))
-    connection.close();
+    connection = engine.connect()
+
+    results = connection.execute("SELECT distinct city FROM airports ORDER BY city")
+    connection.close()
     return render_template('home.html', active_menu=0, answer=results)
 
 
