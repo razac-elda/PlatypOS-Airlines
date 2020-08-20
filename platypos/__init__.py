@@ -1,12 +1,18 @@
 from flask import Flask, render_template
+from flask_login import LoginManager
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'sonounachiavesegreta'
+
+# login_manager = LoginManager()
+# login_manager.init_app(app)
 
 from platypos.main.routes import main
 from platypos.users.routes import users_account
 
-app = Flask(__name__)
-
 app.register_blueprint(main)
 app.register_blueprint(users_account, url_prefix="/utente")
+
 
 @app.route('/voli')
 def voli():
