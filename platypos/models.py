@@ -1,4 +1,26 @@
+from flask_login import UserMixin
 from sqlalchemy import *
+
+
+class User(UserMixin):
+    def __init__(self, id, email, pwd):
+        self.id = id
+        self.email = email
+        self.pwd = pwd
+        self.authenticated = False
+
+    def is_active(self):
+        return True
+
+    def get_id(self):
+        return self.email
+
+    def is_authenticated(self):
+        return self.authenticated
+
+    def is_anonymous(self):
+        return False
+
 
 uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
 engine = create_engine(uri, echo=True)
@@ -42,3 +64,12 @@ bookings = Table('bookings', metadata,
                  )
 
 metadata.create_all(engine)
+
+# @login_manager.user_loader  # attenzione a questo !
+# def load_user(user_id):
+#     connection = engine.connect()
+#     rs = connection.execute(select([users]). \
+#                             where(users.c.user_id == user_id))
+#     user = rs.fetchone()
+#     connection.close()
+#     return User(user.id, user.email, user.pwd)
