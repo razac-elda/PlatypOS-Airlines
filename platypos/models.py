@@ -64,12 +64,3 @@ bookings = Table('bookings', metadata,
                  )
 
 metadata.create_all(engine)
-
-# @login_manager.user_loader  # attenzione a questo !
-# def load_user(user_id):
-#     connection = engine.connect()
-#     rs = connection.execute(select([users]). \
-#                             where(users.c.user_id == user_id))
-#     user = rs.fetchone()
-#     connection.close()
-#     return User(user.id, user.email, user.pwd)

@@ -50,11 +50,10 @@ def form_register():
         connection = engine.connect()
         results = connection.execute(select([users]). \
                                      where(users.c.email == request.form['new_email']))
-        exists = false
+        user_exists = False
         for row in results:
-            exists = true
-        if not exists:
-
+            user_exists = True
+        if not user_exists:
             connection.execute(users.insert(), email=request.form['new_email'], password=request.form['new_pass'],
                                name=request.form['new_name'], surname=request.form['new_surname'])
             connection.close()
