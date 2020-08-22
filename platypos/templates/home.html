@@ -78,4 +78,39 @@
         </datalist>
     {% endif %}
 
+    {% if result %}
+        <table>
+            {% for rowResult in result %}
+                <tr>
+                    <form action="/" method="POST">
+                        <td>
+                            <label> {{ rowResult['flight_code'] }} </label>
+                            <input type="hidden" name="flightCode" value="{{ rowResult['flight_code'] }}">
+                        </td>
+                        <td>
+                            <label> {{ rowResult['departure_airport'] }} </label>
+                            <input type="hidden" name="departureAirport" value="{{ rowResult['departure_airport'] }}">
+                        </td>
+                        <td>
+                            <label> {{ rowResult['arrival_airport'] }} </label>
+                            <input type="hidden" name="arrivalAirport" value="{{ rowResult['arrival_airport'] }}">
+                        </td>
+                        <td>
+                            <label> {{ rowResult['departure_time'] }} </label>
+                            <input type="hidden" name="departureTime" value="{{ rowResult['departure_time'] }}">
+                        </td>
+                        <td>
+                            <label> {{ rowResult['arrival_time'] }} </label>
+                            <input type="hidden" name="arrivalTime" value="{{ rowResult['arrival_time'] }}">
+                        </td>
+                        <td>
+                            <button type="submit"> Prenota</button>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
 {% endblock contenuto %}
+
+
