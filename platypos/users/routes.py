@@ -11,7 +11,8 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 @users_account.route('/profilo')
 def profile():
     if current_user.is_authenticated:
-        return render_template('profilo.html', title='Profilo', user=current_user.get_name(),
+        return render_template('profilo.html', title='Profilo', name=current_user.get_name(),
+                               surname=current_user.get_surname(), email=current_user.get_mail(),
                                logged_in=current_user.is_authenticated)
     else:
         return redirect(url_for('users_account.access_page'))
@@ -21,7 +22,7 @@ def profile():
 def logout():
     if current_user.is_authenticated:
         logout_user()
-    return redirect(url_for('main.homepage'))
+    return redirect(url_for('users_account.access_page'))
 
 
 @users_account.route('/')

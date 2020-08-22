@@ -1,7 +1,73 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-    <h1>Ciao {{ user }}</h1>
-    {% if logged_in %}
-        <a href="/utente/logout" class="btn btn-warning">Logout</a>
-    {%  endif %}
+    <div class="card">
+        <h5 class="card-header">
+            Dati personali
+        </h5>
+        <div class="card-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="Name">Nome</label>
+                            <input type="text" id="Name" class="form-control" placeholder="{{ name }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="Surname">Cognome</label>
+                            <input type="text" id="Surname" class="form-control" placeholder="{{ surname }}" disabled>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="Email">Email</label>
+                            <input type="text" id="Email" class="form-control" placeholder="{{ email }}" disabled>
+                        </div>
+                    </div>
+                </div>
+                <form action="/" method="POST">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="OldPsw">Vecchia password</label>
+                                <input type="text" id="OldPsw" class="form-control" placeholder="Vecchia password" required>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="NewPsw">Nuova password</label>
+                                <input type="text" id="NewPsw" class="form-control" placeholder="Nuova password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm row-space">
+                            <a href="/utente/logout" class="btn btn-warning">Logout</a>
+                        </div>
+                        <div class="col-sm row-space">
+                            <button type="submit" class="btn btn-warning">Cambia password</button>
+                        </div>
+                        <div class="col-sm row-space">
+                            <a href="/utente/logout" class="btn btn-danger">Elimina account</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container row-space">
+        <div class="row">
+
+        </div>
+    </div>
+    <div class="card row-space">
+        <h5 class="card-header">
+            Voli prenotati
+        </h5>
+        <div class="card-body">
+
+        </div>
+    </div>
 {% endblock contenuto %}
