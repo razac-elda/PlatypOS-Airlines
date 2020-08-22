@@ -68,10 +68,10 @@ flights = Table('flights', metadata,
                 )
 
 bookings = Table('bookings', metadata,
-                 Column('bookingId', Integer, primary_key=True),
-                 Column('seatNumber', Integer, nullable=False),
-                 Column('userId', Integer, ForeignKey('users.user_id')),
-                 Column('flightCode', Integer, ForeignKey('flights.flight_code')),
+                 Column('booking_id', Integer, primary_key=True),
+                 Column('seat_number', Integer, nullable=False),
+                 Column('user_id', Integer, ForeignKey('users.user_id')),
+                 Column('flight_code', Integer, ForeignKey('flights.flight_code')),
                  )
 
 metadata.create_all(engine)
