@@ -3,9 +3,11 @@ from sqlalchemy import *
 
 
 class User(UserMixin):
-    def __init__(self, id, email, pwd):
+    def __init__(self, id, email, name, surname, pwd):
         self.id = id
         self.email = email
+        self.name = name
+        self.surname = surname
         self.pwd = pwd
         self.authenticated = False
 
@@ -13,7 +15,16 @@ class User(UserMixin):
         return True
 
     def get_id(self):
-        return self.email
+        return self.id
+
+    def get_mail(self):
+        return text(self.email)
+
+    def get_name(self):
+        return text(self.name)
+
+    def get_surname(self):
+        return text(self.surname)
 
     def is_authenticated(self):
         return self.authenticated

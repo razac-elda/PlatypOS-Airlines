@@ -1,15 +1,19 @@
-from platypos.models import *
 from platypos import login_manager
+from platypos.models import *
 
 
 @login_manager.user_loader
-def load_user(email):
+def load_user(uid):
     connection = engine.connect()
-    result = connection.execute(select([users.c.user_id, users.c.password]). \
-                                where(users.c.email == email))
-    id = ''
-    psw = ''
+    result = connection.execute(select([users]). \
+                                where(users.c.user_id == uid))
+    email = None
+    name = None
+    surname = None
+    psw = None
     for row in result:
-        id = row['user_id']
+        email = row['email']
+        name = row['name']
+        surname = row['surname']
         psw = row['password']
-    return User(id, email, psw)
+    return User(uid, email, name, surname, psw)

@@ -1,4 +1,6 @@
 from flask import Blueprint, render_template, request
+from flask_login import current_user
+
 from platypos.models import *
 
 main = Blueprint('main', __name__, template_folder='templates', static_folder='static')
@@ -27,5 +29,5 @@ def homepage():
             " WHERE a1.city=:cityfrom AND a2.city=:cityto AND date(f.departure_time)=:departure")
         results = connection.execute(s, cityfrom=flyFrom, cityto=flyTo, departure=flyDepDate)
         connection.close()
-        return render_template('home.html', active_menu=0, result=results, dynamiclist=list)
-    return render_template('home.html', active_menu=0, dynamiclist=list)
+        return render_template('home.html', active_menu=0, result=results, dynamiclist=list, logged_in=current_user.is_authenticated)
+    return render_template('home.html', active_menu=0, dynamiclist=list, logged_in=current_user.is_authenticated)

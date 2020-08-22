@@ -43,7 +43,11 @@
                 </li>
             </ul>
             <div class="btn-group">
-                <a href="/utente/autenticazione" class="btn btn-warning">Accedi / Registrati</a>
+                {% if logged_in %}
+                    <a href="/utente/profilo" class="btn btn-warning rounded-pill">Profilo</a>
+                {% else %}
+                    <a href="/utente/autenticazione" class="btn btn-warning rounded-pill">Accedi / Registrati</a>
+                {% endif %}
             </div>
         </div>
     </nav>

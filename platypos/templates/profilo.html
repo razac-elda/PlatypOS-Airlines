@@ -1,4 +1,7 @@
 {% extends "layout.html" %}
 {% block contenuto %}
     <h1>Ciao {{ user }}</h1>
+    {% if logged_in %}
+        <a href="/utente/logout" class="btn btn-warning">Logout</a>
+    {%  endif %}
 {% endblock contenuto %}
