@@ -59,8 +59,7 @@ def form_login():
                 # Passaggi a flask-login
                 login_user(user)
                 return redirect(url_for('users_account.profile'))
-        else:
-            return render_template('autenticazione.html', title='Accedi / Registrati Errore', logged_in=False)
+        return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, invalid=True)
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
 
 
@@ -87,5 +86,5 @@ def form_register():
             connection.close()
             return redirect(url_for('users_account.profile'))
         else:
-            return render_template('autenticazione.html', title='Accedi / Registrati Errore', logged_in=False)
+            return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)

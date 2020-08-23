@@ -1,5 +1,21 @@
 {% extends "layout.html" %}
 {% block contenuto %}
+    {% if invalid %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Email o password errata.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+    {% if exist %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Email già registrata.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-sm">
             <!-- Accesso -->
@@ -47,7 +63,8 @@
                     Registrazione
                 </h5>
                 <div class="card-body">
-                    <form action="/utente/registrazione" method="post">
+                    <form action="/utente/registrazione" method="post"
+                          oninput='new_pass_check.setCustomValidity(new_pass_check.value !== new_pass.value ? "Le password non corrispondono." : "")'>
                         <div class="container">
                             <div class="row">
                                 <div class="col-sm">
@@ -80,10 +97,20 @@
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="form-group">
-                                        <label for="password">Password</label>
+                                        <label for="password">Password (almeno 3 caratteri)</label>
                                         <input type="password" class="form-control" id="password"
                                                placeholder="Password"
-                                               name="new_pass" required>
+                                               name="new_pass" minlength="3" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <label for="password_check">Ripeti password</label>
+                                        <input type="password" class="form-control" id="password_check"
+                                               placeholder="Ripeti password"
+                                               name="new_pass_check" required>
                                     </div>
                                 </div>
                             </div>
