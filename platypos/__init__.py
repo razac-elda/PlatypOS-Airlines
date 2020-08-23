@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
 
 app = Flask(__name__)
@@ -6,6 +7,8 @@ app.config['SECRET_KEY'] = 'sonounachiavesegreta'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+bcrypt = Bcrypt(app)
 
 # Le pagine vengono divise con delle blueprint in base al ruolo.
 # main contiene la pagina principale con la ricerca e prenotazione

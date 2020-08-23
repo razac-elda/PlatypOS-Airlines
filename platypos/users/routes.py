@@ -1,5 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for
 from flask_login import login_user, current_user, logout_user
+
+from platypos import bcrypt
 from platypos.models import *
 from platypos.users.utils import load_user
 
@@ -50,7 +52,7 @@ def form_login():
             real_password = row['password']
             user_id = row['user_id']
         # Se la password e' corretta si procede al login
-        if request.form['pass'] == real_password:
+        if bcrypt.check_password_hash(real_password, request.form['pass']):
             # Creazione istanza classe User tramite id
             user = load_user(user_id)
             # Passaggi a flask-login
@@ -75,9 +77,11 @@ def form_register():
         for row in results:
             user_exists = True
         if not user_exists:
+            # Hashing della password con flask-bcrypt
+            hashed_password = bcrypt.generate_password_hash(request.form['new_pass']).decode('utf-8')
             # Inserimento nuovo utente
             connection = engine.connect()
-            connection.execute(users.insert(), email=request.form['new_email'], password=request.form['new_pass'],
+            connection.execute(users.insert(), email=request.form['new_email'], password=hashed_password,
                                name=request.form['new_name'], surname=request.form['new_surname'])
             connection.close()
             return redirect(url_for('users_account.profile'))

@@ -46,7 +46,7 @@ metadata = MetaData()
 users = Table('users', metadata,
               Column('user_id', Integer, primary_key=True),
               Column('email', String(254), unique=True, nullable=False),
-              Column('password', String(128), nullable=False),
+              Column('password', String(60), nullable=False),
               Column('name', String(255), nullable=False),
               Column('surname', String(255), nullable=False),
               )
