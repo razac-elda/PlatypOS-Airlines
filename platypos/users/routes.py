@@ -51,13 +51,14 @@ def form_login():
         for row in results:
             real_password = row['password']
             user_id = row['user_id']
-        # Se la password e' corretta si procede al login
-        if bcrypt.check_password_hash(real_password, request.form['pass']):
-            # Creazione istanza classe User tramite id
-            user = load_user(user_id)
-            # Passaggi a flask-login
-            login_user(user)
-            return redirect(url_for('users_account.profile'))
+        # Se l'utente esiste e la password e' corretta si procede al login
+        if real_password and user_id:
+            if bcrypt.check_password_hash(real_password, request.form['pass']):
+                # Creazione istanza classe User tramite id
+                user = load_user(user_id)
+                # Passaggi a flask-login
+                login_user(user)
+                return redirect(url_for('users_account.profile'))
         else:
             return render_template('autenticazione.html', title='Accedi / Registrati Errore', logged_in=False)
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
