@@ -44,7 +44,7 @@ def form_login():
         connection = engine.connect()
         # Vengono prelevate la password e l'id corrispondenti alla mail
         results = connection.execute(select([users.c.password, users.c.user_id]). \
-                                     where(users.c.email == request.form['email']))
+                                     where(users.c.email == request.form['email'].lower()))
         connection.close()
         real_password = None
         user_id = None
@@ -71,7 +71,7 @@ def form_register():
         # Controllo che non esista gia' un utente con la mail passata
         connection = engine.connect()
         results = connection.execute(select([users]). \
-                                     where(users.c.email == request.form['new_email']))
+                                     where(users.c.email == request.form['new_email'].lower()))
         connection.close()
         user_exists = False
         for row in results:
@@ -81,7 +81,7 @@ def form_register():
             hashed_password = bcrypt.generate_password_hash(request.form['new_pass']).decode('utf-8')
             # Inserimento nuovo utente
             connection = engine.connect()
-            connection.execute(users.insert(), email=request.form['new_email'], password=hashed_password,
+            connection.execute(users.insert(), email=request.form['new_email'].lower(), password=hashed_password,
                                name=request.form['new_name'], surname=request.form['new_surname'])
             connection.close()
             return redirect(url_for('users_account.profile'))
