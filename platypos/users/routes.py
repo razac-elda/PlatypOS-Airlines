@@ -7,6 +7,7 @@ from platypos.users.utils import load_user
 
 users_account = Blueprint('users_account', __name__, template_folder='templates', static_folder='static')
 
+
 # Viene preferito l'uso di current_user.is_authenticated per poter reindirizzare invece che @login_required
 
 @users_account.route('/profilo')

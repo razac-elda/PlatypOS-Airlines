@@ -9,7 +9,7 @@ main = Blueprint('main', __name__, template_folder='templates', static_folder='s
 @main.route('/home', methods=['GET', 'POST'])
 def homepage():
     connection = engine.connect()
-    dynamiclist = connection.execute("SELECT distinct city FROM airports ORDER BY city")
+    dynamiclist = connection.execute("SELECT distinct province FROM airports ORDER BY province")
     connection.close()
     if request.method == 'POST':
         flyFrom = request.form['fly_from']

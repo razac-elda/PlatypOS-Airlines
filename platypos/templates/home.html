@@ -14,14 +14,14 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="FromInput">Da</label>
-                                <input type="text" class="form-control" id="FromInput" placeholder="Città"
+                                <input type="text" class="form-control" id="FromInput" placeholder="Città/Provincia"
                                        name="fly_from" list="airport" required>
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="ToInput">A</label>
-                                <input type="text" class="form-control" id="ToInput" placeholder="Città"
+                                <input type="text" class="form-control" id="ToInput" placeholder="Città/Provincia"
                                        name="fly_to" list="airport" required>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
         <!-- Generazione dinamica elenco citta' -->
         <datalist id="airport">
             {% for row in dynamiclist %}
-                <option value="{{ row['city'] }}"></option>
+                <option value="{{ row['province'] }}"></option>
             {% endfor %}
         </datalist>
     {% endif %}
