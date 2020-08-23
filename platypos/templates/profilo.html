@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block contenuto %}
+    <!-- Dati utente -->
     <div class="card">
         <h5 class="card-header">
             Dati personali
@@ -31,13 +32,15 @@
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="OldPsw">Vecchia password</label>
-                                <input type="text" id="OldPsw" class="form-control" placeholder="Vecchia password" required>
+                                <input type="text" id="OldPsw" class="form-control" placeholder="Vecchia password"
+                                       required>
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="NewPsw">Nuova password</label>
-                                <input type="text" id="NewPsw" class="form-control" placeholder="Nuova password" required>
+                                <input type="text" id="NewPsw" class="form-control" placeholder="Nuova password"
+                                       required>
                             </div>
                         </div>
                     </div>
@@ -62,12 +65,17 @@
 
         </div>
     </div>
+    <!-- Voli prenotati -->
     <div class="card row-space">
         <h5 class="card-header">
             Voli prenotati
         </h5>
         <div class="card-body">
+            {% if bookings %}
 
+            {% else %}
+                Nessuna prenotazione
+            {% endif %}
         </div>
     </div>
 {% endblock contenuto %}

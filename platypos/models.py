@@ -2,6 +2,8 @@ from flask_login import UserMixin
 from sqlalchemy import *
 
 
+# Classe User per flask-login
+
 class User(UserMixin):
     def __init__(self, id, email, name, surname, pwd):
         self.id = id
@@ -33,10 +35,13 @@ class User(UserMixin):
         return False
 
 
+# Nome utente, password e DB da modificare in base alle esigenze
 uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
 engine = create_engine(uri, echo=True)
 
 metadata = MetaData()
+
+# Schema DB
 
 users = Table('users', metadata,
               Column('user_id', Integer, primary_key=True),

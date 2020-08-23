@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from flask_login import LoginManager, login_required, current_user
+from flask_login import LoginManager, current_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sonounachiavesegreta'
@@ -7,6 +7,9 @@ app.config['SECRET_KEY'] = 'sonounachiavesegreta'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
+# Le pagine vengono divise con delle blueprint in base al ruolo.
+# main contiene la pagina principale con la ricerca e prenotazione
+# users_account gestisce l'interazione con l'account degli utenti
 from platypos.main.routes import main
 from platypos.users.routes import users_account
 
@@ -20,7 +23,6 @@ def voli():
 
 
 @app.route('/notizie')
-@login_required
 def notizie():
     return render_template('notizie.html', title='Notizie', active_menu=2, logged_in=current_user.is_authenticated)
 
