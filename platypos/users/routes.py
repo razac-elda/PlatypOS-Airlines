@@ -35,7 +35,30 @@ def profile():
         return redirect(url_for('users_account.access_page'))
 
 
-@users_account.route('/nuovo_volo', methods=['GET', 'POST'])
+@users_account.route('/profilo/cambio_password', methods=['GET', 'POST'])
+def change_password():
+    if current_user.is_authenticated:
+        if request.method == 'POST':
+            connection = engine.connect()
+            results = connection.execute(select([users.c.password]). \
+                                         where(users.c.user_id == current_user.get_id()))
+            connection.close()
+            password = results.fetchone()['password']
+            if bcrypt.check_password_hash(password, request.form['old_psw']):
+                hashed_password = bcrypt.generate_password_hash(request.form['new_psw']).decode('utf-8')
+                connection = engine.connect()
+                connection.execute(users.update().values(password=hashed_password). \
+                                   where(users.c.user_id == current_user.get_id()))
+                connection.close()
+                return redirect(url_for('users_account.logout'))
+            else:
+                return render_template('profilo.html', title='Profilo personale', name=current_user.get_name(),
+                                       surname=current_user.get_surname(), email=current_user.get_mail(),
+                                       logged_in=current_user.is_authenticated, invalid=True)
+    return redirect(url_for('users_account.profile'))
+
+
+@users_account.route('/profilo/nuovo_volo', methods=['GET', 'POST'])
 def new_flight():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
@@ -54,7 +77,7 @@ def new_flight():
     return redirect(url_for('users_account.profile'))
 
 
-@users_account.route('/logout')
+@users_account.route('/profilo/logout')
 def logout():
     if current_user.is_authenticated:
         logout_user()

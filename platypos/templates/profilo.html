@@ -1,5 +1,13 @@
 {% extends "layout.html" %}
 {% block contenuto %}
+    {% if invalid %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            Vecchia password errata.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
     <!-- Dati utente -->
     <div class="card">
         <h5 class="card-header">
@@ -27,19 +35,22 @@
                         </div>
                     </div>
                 </div>
-                <form action="/utente/cambio_password" method="POST">
+                <form action="/utente/profilo/cambio_password" method="POST"
+                      oninput='new_psw.setCustomValidity(old_psw.value === new_psw.value ? "Password invariata" : "")'>
                     <div class="row">
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="OldPsw">Vecchia password</label>
-                                <input type="text" id="OldPsw" class="form-control" placeholder="Vecchia password"
+                                <input type="password" id="OldPsw" class="form-control" name="old_psw"
+                                       placeholder="Vecchia password"
                                        required>
                             </div>
                         </div>
                         <div class="col-sm">
                             <div class="form-group">
                                 <label for="NewPsw">Nuova password</label>
-                                <input type="text" id="NewPsw" class="form-control" placeholder="Nuova password"
+                                <input type="password" id="NewPsw" class="form-control" name="new_psw"
+                                       placeholder="Nuova password"
                                        required>
                             </div>
                         </div>
@@ -47,13 +58,13 @@
 
                     <div class="row">
                         <div class="col-sm row-space">
-                            <a href="/utente/logout" class="btn btn-warning">Logout</a>
+                            <a href="/utente/profilo/logout" class="btn btn-warning">Logout</a>
                         </div>
                         <div class="col-sm row-space">
                             <button type="submit" class="btn btn-warning">Cambia password</button>
                         </div>
                         <div class="col-sm row-space">
-                            <a href="/utente/logout" class="btn btn-danger">Elimina account</a>
+                            <a href="/utente/profilo/logout" class="btn btn-danger">Elimina account</a>
                         </div>
                     </div>
                 </form>
