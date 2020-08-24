@@ -13,12 +13,45 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 @users_account.route('/profilo')
 def profile():
     if current_user.is_authenticated:
-        # Viene utilizzata la sessione dell'utente per ottenere i suoi dati personali
-        return render_template('profilo.html', title='Profilo', name=current_user.get_name(),
-                               surname=current_user.get_surname(), email=current_user.get_mail(),
-                               logged_in=current_user.is_authenticated)
+        if current_user.get_permission() > 0:
+            connection = engine.connect()
+            planes = connection.execute(select([airplanes.c.plane_code]). \
+                                        order_by(airplanes.c.plane_code))
+            airports_from = connection.execute(select([airports.c.name]). \
+                                               order_by(airports.c.name))
+            airports_to = connection.execute(select([airports.c.name]). \
+                                             order_by(airports.c.name))
+            connection.close()
+            return render_template('amministrazione.html', title='Amministrazione',
+                                   dynamic_airport_from=airports_from,
+                                   dynamic_airport_to=airports_to, dynamic_plane=planes,
+                                   logged_in=current_user.is_authenticated)
+        else:
+            # Viene utilizzata la sessione dell'utente per ottenere i suoi dati personali
+            return render_template('profilo.html', title='Profilo personale', name=current_user.get_name(),
+                                   surname=current_user.get_surname(), email=current_user.get_mail(),
+                                   logged_in=current_user.is_authenticated)
     else:
         return redirect(url_for('users_account.access_page'))
+
+
+@users_account.route('/nuovo_volo', methods=['GET', 'POST'])
+def new_flight():
+    if current_user.is_authenticated and current_user.get_permission() > 0:
+        if request.method == 'POST':
+            connection = engine.connect()
+            airports_from = connection.execute(select([airports.c.airport_id]). \
+                                               where(airports.c.name == request.form['fly_from']))
+            airports_to = connection.execute(select([airports.c.airport_id]). \
+                                             where(airports.c.name == request.form['fly_to']))
+            airport_from = airports_from.fetchone()['airport_id']
+            airport_to = airports_to.fetchone()['airport_id']
+            connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
+                               arrival_time=request.form['fly_arrival_date'],
+                               departure_airport=airport_from, arrival_airport=airport_to,
+                               plane_code=request.form['plane_code'])
+            connection.close()
+    return redirect(url_for('users_account.profile'))
 
 
 @users_account.route('/logout')

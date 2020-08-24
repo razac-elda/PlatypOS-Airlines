@@ -4,13 +4,15 @@ from sqlalchemy import *
 
 # Classe User per flask-login
 
+
 class User(UserMixin):
-    def __init__(self, id, email, name, surname, pwd):
+    def __init__(self, id, email, name, surname, pwd, permission_level):
         self.id = id
         self.email = email
         self.name = name
         self.surname = surname
         self.pwd = pwd
+        self.permission_level = permission_level
         self.authenticated = False
 
     def is_active(self):
@@ -27,6 +29,9 @@ class User(UserMixin):
 
     def get_surname(self):
         return text(self.surname)
+
+    def get_permission(self):
+        return self.permission_level
 
     def is_authenticated(self):
         return self.authenticated
@@ -49,6 +54,7 @@ users = Table('users', metadata,
               Column('password', String(60), nullable=False),
               Column('name', String(255), nullable=False),
               Column('surname', String(255), nullable=False),
+              Column('permission_level', Integer, default=0),
               )
 
 airports = Table('airports', metadata,

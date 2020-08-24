@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+    <div class="card">
+        <h5 class="card-header">
+            Inserisci nuovo volo
+        </h5>
+        <div class="card-body">
+            <form action="/utente/nuovo_volo" method="POST">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="FromInput">Da</label>
+                                <select class="form-control" id="FromInput" name="fly_from" required>
+                                    {% if dynamic_airport_from%}
+                                        {% for row in dynamic_airport_from %}
+                                            <option>{{ row['name'] }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="ToInput">A</label>
+                                <select class="form-control" id="ToInput" name="fly_to" required>
+                                    {% if dynamic_airport_to %}
+                                        {% for row in dynamic_airport_to %}
+                                            <option>{{ row['name'] }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm">
+                            <label for="DateStart">Partenza</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="DateStart" data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_dep_date"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="DateEnd">Ritorno</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="DateEnd" data-provide="datepicker"
+                                       data-date-format="dd/mm/yyyy" placeholder="gg/mm/aaaa" name="fly_arrival_date"
+                                       required>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <div class="form-group">
+                                <label for="PlaneCode">Codice aereo</label>
+                                <select class="form-control" id="PlaneCode" name="plane_code" required>
+                                    {% if dynamic_plane %}
+                                        <!-- Generazione lista aerei -->
+                                        {% for row in dynamic_plane %}
+                                            <option>{{ row['plane_code'] }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="Insert">Verificare correttezza dati!</label>
+                            <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm row-space">
+            <a href="/utente/logout" class="btn btn-warning">Logout</a>
+        </div>
+    </div>
+{% endblock contenuto %}

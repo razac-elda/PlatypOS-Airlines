@@ -11,9 +11,11 @@ def load_user(uid):
     name = None
     surname = None
     psw = None
+    permission_level = None
     for row in result:
         email = row['email']
         name = row['name']
         surname = row['surname']
         psw = row['password']
-    return User(uid, email, name, surname, psw)
+        permission_level = row['permission_level']
+    return User(uid, email, name, surname, psw, permission_level)
