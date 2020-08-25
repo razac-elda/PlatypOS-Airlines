@@ -8,7 +8,7 @@
             Dove vuoi andare?
         </h5>
         <div class="card-body">
-            <form action="/" method="POST">
+            <form action="/book_outbound" method="POST">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
@@ -79,60 +79,7 @@
     {% endif %}
     {% if result %}
         <!-- Generazione risultati -->
-        <div class="card row-space">
-            <h5 class="card-header">
-                Voli disponibili
-            </h5>
-            <div class="card-body">
-                {% for rowResult in result %}
-                    <form action="/" method="POST">
-                        <div class="card row-space">
-                            <div class="container">
-                                <div class="row row-space">
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label for="FromResult"> {{ rowResult['departure_airport'] }} </label>
-                                            <input type="hidden" class="form-control" id="FromResult"
-                                                   name="departureAirport"
-                                                   value="{{ rowResult['departure_airport'] }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label for="ToResult"> {{ rowResult['arrival_airport'] }} </label>
-                                            <input type="hidden" class="form-control" id="ToResult"
-                                                   name="arrivalAirport"
-                                                   value="{{ rowResult['arrival_airport'] }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label for="DateStartResult"> {{ rowResult['departure_time'] }} </label>
-                                            <input type="hidden" class="form-control" id="DateStartResult"
-                                                   name="fly_dep_date_result"
-                                                   value="{{ rowResult['departure_time'] }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <label for="DateEndResult"> {{ rowResult['arrival_time'] }} </label>
-                                            <input type="hidden" class="form-control" id="DateEndResult"
-                                                   name="fly_arrival_date_result"
-                                                   value="{{ rowResult['arrival_time'] }}">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm">
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-info">Prenota</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                {% endfor %}
-            </div>
-        </div>
+
     {% endif %}
 {% endblock contenuto %}
 

@@ -20,16 +20,6 @@ app.register_blueprint(main)
 app.register_blueprint(users_account, url_prefix="/utente")
 
 
-@app.route('/voli')
-def voli():
-    return render_template('voli.html', title='Voli', active_menu=1, logged_in=current_user.is_authenticated)
-
-
-@app.route('/notizie')
-def notizie():
-    return render_template('notizie.html', title='Notizie', active_menu=2, logged_in=current_user.is_authenticated)
-
-
 @app.route('/contatti')
 def contatti():
-    return render_template('contatti.html', title='Contatti', active_menu=3, logged_in=current_user.is_authenticated)
+    return render_template('contatti.html', title='Contatti', active_menu=1, logged_in=current_user.is_authenticated)

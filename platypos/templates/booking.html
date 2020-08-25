@@ -1,0 +1,158 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+    {% if book_outbound %}
+        <div class="card row-space">
+            <h5 class="card-header">
+                Voli andata disponibili
+            </h5>
+            <div class="card-body">
+                {% for row in results_outbound %}
+                    <form action="{% if flyReturnDate %}/book_return{% else %}/{% endif %}" method="POST">
+                        <div class="card row-space">
+                            <div class="container">
+                                <div class="row row-space">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="FromResult">Da:<br>{{ row['departure_airport'] }} </label>
+                                            <input type="hidden" class="form-control" id="FromResult"
+                                                   name="departure_airport"
+                                                   value="{{ row['departure_airport'] }}">
+                                            {% if flyReturnDate %}
+                                                <input type="hidden" class="form-control" name="province_from"
+                                                       value="{{ row['province_from'] }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="ToResult">A:<br>{{ row['arrival_airport'] }} </label>
+                                            <input type="hidden" class="form-control" id="ToResult"
+                                                   name="arrival_airport"
+                                                   value="{{ row['arrival_airport'] }}">
+                                            {% if flyReturnDate %}
+                                                <input type="hidden" class="form-control" name="province_to"
+                                                       value="{{ row['province_to'] }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="DateStartResult">Partenza:<br>{{ row['departure_time'] }}
+                                            </label>
+                                            <input type="hidden" class="form-control" id="DateStartResult"
+                                                   name="fly_dep_date"
+                                                   value="{{ row['departure_time'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="DateEndResult">Arrivo:<br>{{ row['arrival_time'] }} </label>
+                                            <input type="hidden" class="form-control" id="DateEndResult"
+                                                   name="fly_arrival_date"
+                                                   value="{{ row['arrival_time'] }}">
+                                            {% if flyReturnDate %}
+                                                <input type="hidden" class="form-control" name="fly_return_date"
+                                                       value="{{ flyReturnDate }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="PlaneCode">Aereo:<br>{{ row['plane_code'] }} </label>
+                                            <input type="hidden" class="form-control" id="PlaneCode"
+                                                   name="plane_code"
+                                                   value="{{ row['plane_code'] }}">
+                                            <input type="hidden" class="form-control" name="flight_code"
+                                                   value="{{ row['flight_code'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            {% if logged_in %}
+                                                <button type="submit" class="btn btn-info">Prenota</button>
+                                            {% else %}
+                                                <a href="/utente/autenticazione" class="btn btn-warning">Accedi /
+                                                    Registrati</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="card row-space">
+            <h5 class="card-header">
+                Voli ritorno disponibili
+            </h5>
+            <div class="card-body">
+                {% for row in results_return %}
+                    <form action="/" method="POST">
+                        <div class="card row-space">
+                            <div class="container">
+                                <div class="row row-space">
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="ToResult">Da:<br>{{ row['departure_airport'] }} </label>
+                                            <input type="hidden" class="form-control" id="ToResult"
+                                                   name="departure_airport"
+                                                   value="{{ row['departure_airport'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="FromResult">A:<br>{{ row['arrival_airport'] }} </label>
+                                            <input type="hidden" class="form-control" id="FromResult"
+                                                   name="arrival_airport"
+                                                   value="{{ row['arrival_airport'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="DateStartResult">Partenza:<br>{{ row['departure_time'] }}
+                                            </label>
+                                            <input type="hidden" class="form-control" id="DateStartResult"
+                                                   name="fly_dep_date"
+                                                   value="{{ row['departure_time'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="DateEndResult">Arrivo:<br>{{ row['arrival_time'] }} </label>
+                                            <input type="hidden" class="form-control" id="DateEndResult"
+                                                   name="fly_arrival_date"
+                                                   value="{{ row['arrival_time'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="PlaneCode">Aereo:<br>{{ row['plane_code'] }} </label>
+                                            <input type="hidden" class="form-control" id="PlaneCode"
+                                                   name="plane_code"
+                                                   value="{{ row['plane_code'] }}">
+                                            <input type="hidden" class="form-control" name="flight_code"
+                                                   value="{{ row['flight_code'] }}">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="form-group">
+                                            {% if logged_in %}
+                                                <button type="submit" class="btn btn-info">Prenota</button>
+                                            {% else %}
+                                                <a href="/utente/autenticazione" class="btn btn-warning">Accedi /
+                                                    Registrati</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock contenuto %}
