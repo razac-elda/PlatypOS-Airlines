@@ -14,13 +14,18 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 def profile():
     if current_user.is_authenticated:
         if current_user.get_permission() > 0:
-            connection = engine.connect()
-            planes = connection.execute(select([airplanes.c.plane_code]). \
+            #se da problemi cancellare la riga che inizia con with e  mettere solo connection = engine.connect() e lasciare le query
+
+            #usato il valore UNREPEATABLE READ  xk in questa transazione le query leggono solo 
+            #se un amministratore cancella un volo nell'esatto istante che un utente carica il proprio profilo non si creano valori sporchi
+            with engine.connect().execution_options(isolation_level="UNREPEATABLE READ") as connection:
+                planes = connection.execute(select([airplanes.c.plane_code]). \
                                         order_by(airplanes.c.plane_code))
-            airports_from = connection.execute(select([airports.c.name]). \
+                airports_from = connection.execute(select([airports.c.name]). \
                                                order_by(airports.c.name))
-            airports_to = connection.execute(select([airports.c.name]). \
+                airports_to = connection.execute(select([airports.c.name]). \
                                              order_by(airports.c.name))
+            #in teoria non serve il la chiusura della connessione xk viene automaticamente chiusa alla fine del with
             connection.close()
             return render_template('amministrazione.html', title='Amministrazione',
                                    dynamic_airport_from=airports_from,
@@ -42,6 +47,7 @@ def change_password():
             connection = engine.connect()
             results = connection.execute(select([users.c.password]). \
                                          where(users.c.user_id == current_user.get_id()))
+
             connection.close()
             password = results.fetchone()['password']
             if bcrypt.check_password_hash(password, request.form['old_psw']):
