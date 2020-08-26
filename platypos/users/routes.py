@@ -16,9 +16,9 @@ def profile():
         if current_user.get_permission() > 0:
             #se da problemi cancellare la riga che inizia con with e  mettere solo connection = engine.connect() e lasciare le query
 
-            #usato il valore UNREPEATABLE READ  xk in questa transazione le query leggono solo 
+            #usato il valore REPEATABLE READ  xk in questa transazione le query leggono solo
             #se un amministratore cancella un volo nell'esatto istante che un utente carica il proprio profilo non si creano valori sporchi
-            with engine.connect().execution_options(isolation_level="UNREPEATABLE READ") as connection:
+            with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
                 planes = connection.execute(select([airplanes.c.plane_code]). \
                                         order_by(airplanes.c.plane_code))
                 airports_from = connection.execute(select([airports.c.name]). \
