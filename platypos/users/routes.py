@@ -107,11 +107,11 @@ def form_login():
     if current_user.is_authenticated:
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
-        connection = engine.connect()
-        # Vengono prelevate la password e l'id corrispondenti alla mail
-        results = connection.execute(select([users.c.password, users.c.user_id]). \
-                                     where(users.c.email == request.form['email'].lower()))
-        connection.close()
+        #rilassato il vincolo read committed xk la email e il nome e cognome non possono essere toccati da altre query
+        with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
+            # Vengono prelevate la password e l'id corrispondenti alla mail
+            results = connection.execute(select([users.c.password, users.c.user_id]). \
+                                         where(users.c.email == request.form['email'].lower()))
         real_password = None
         user_id = None
         for row in results:
@@ -135,7 +135,7 @@ def form_register():
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
         # Controllo che non esista gia' un utente con la mail passata
-        # SERIALIZABLE xk non vengono creati conflissi se 2 utenti tentano di registrarsi con la stessa email nello stesso momento
+        # SERIALIZABLE xk non vengano creati conflitti se 2 utenti tentano di registrarsi con la stessa email nello stesso momento
         with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
             results = connection.execute(select([users]). \
                                          where(users.c.email == request.form['new_email'].lower()))
@@ -155,3 +155,5 @@ def form_register():
                 return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
 
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
+
+
