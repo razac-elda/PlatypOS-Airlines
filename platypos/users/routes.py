@@ -135,22 +135,23 @@ def form_register():
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
         # Controllo che non esista gia' un utente con la mail passata
-        connection = engine.connect()
-        results = connection.execute(select([users]). \
-                                     where(users.c.email == request.form['new_email'].lower()))
-        connection.close()
-        user_exists = False
-        for row in results:
-            user_exists = True
-        if not user_exists:
-            # Hashing della password con flask-bcrypt
-            hashed_password = bcrypt.generate_password_hash(request.form['new_pass']).decode('utf-8')
-            # Inserimento nuovo utente
-            connection = engine.connect()
-            connection.execute(users.insert(), email=request.form['new_email'].lower(), password=hashed_password,
-                               name=request.form['new_name'], surname=request.form['new_surname'])
-            connection.close()
-            return redirect(url_for('users_account.profile'))
-        else:
-            return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
+        # SERIALIZABLE xk non vengono creati conflissi se 2 utenti tentano di registrarsi con la stessa email nello stesso momento
+        with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+            results = connection.execute(select([users]). \
+                                         where(users.c.email == request.form['new_email'].lower()))
+            user_exists = False
+            for row in results:
+                user_exists = True
+            if not user_exists:
+                # Hashing della password con flask-bcrypt
+                hashed_password = bcrypt.generate_password_hash(request.form['new_pass']).decode('utf-8')
+                # Inserimento nuovo utente
+                connection = engine.connect()
+                connection.execute(users.insert(), email=request.form['new_email'].lower(), password=hashed_password,
+                                   name=request.form['new_name'], surname=request.form['new_surname'])
+
+                return redirect(url_for('users_account.profile'))
+            else:
+                return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
+
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
