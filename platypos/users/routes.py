@@ -14,19 +14,18 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 def profile():
     if current_user.is_authenticated:
         if current_user.get_permission() > 0:
-            #se da problemi cancellare la riga che inizia con with e  mettere solo connection = engine.connect() e lasciare le query
-
-            #usato il valore REPEATABLE READ  xk in questa transazione le query leggono solo
-            #se un amministratore cancella un volo nell'esatto istante che un utente carica il proprio profilo non si creano valori sporchi
+            #query tooltip dei voli
+            #crea una connessione che è una transazione
+            #altri amministratori in questo progetto non possono modificare gli areoporti arerei e codice dell'aereo
             with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+
                 planes = connection.execute(select([airplanes.c.plane_code]). \
-                                        order_by(airplanes.c.plane_code))
+                                            order_by(airplanes.c.plane_code))
                 airports_from = connection.execute(select([airports.c.name]). \
-                                               order_by(airports.c.name))
+                                                   order_by(airports.c.name))
                 airports_to = connection.execute(select([airports.c.name]). \
-                                             order_by(airports.c.name))
-            #in teoria non serve il la chiusura della connessione xk viene automaticamente chiusa alla fine del with
-            connection.close()
+                                                 order_by(airports.c.name))
+
             return render_template('amministrazione.html', title='Amministrazione',
                                    dynamic_airport_from=airports_from,
                                    dynamic_airport_to=airports_to, dynamic_plane=planes,
@@ -46,17 +45,19 @@ def change_password():
         if request.method == 'POST':
             connection = engine.connect()
             results = connection.execute(select([users.c.password]). \
-                                         where(users.c.user_id == current_user.get_id()))
+                                                 where(users.c.user_id == current_user.get_id()))
 
             connection.close()
             password = results.fetchone()['password']
             if bcrypt.check_password_hash(password, request.form['old_psw']):
                 hashed_password = bcrypt.generate_password_hash(request.form['new_psw']).decode('utf-8')
-                connection = engine.connect()
-                connection.execute(users.update().values(password=hashed_password). \
-                                   where(users.c.user_id == current_user.get_id()))
-                connection.close()
-                return redirect(url_for('users_account.logout'))
+                #la connessione è interpretata come una transazione
+                #non serve chudere la connessione xk dopo il blocco with viene chiusa in automatico
+                #repeatabla read xk anche se piu utenti modificano le relative password contemporaneamente non ci dovrebbero essere problemi
+                with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+                    connection.execute(users.update().values(password=hashed_password). \
+                                       where(users.c.user_id == current_user.get_id()))
+                    return redirect(url_for('users_account.logout'))
             else:
                 return render_template('profilo.html', title='Profilo personale', name=current_user.get_name(),
                                        surname=current_user.get_surname(), email=current_user.get_mail(),
@@ -68,18 +69,20 @@ def change_password():
 def new_flight():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
-            connection = engine.connect()
-            airports_from = connection.execute(select([airports.c.airport_id]). \
-                                               where(airports.c.name == request.form['fly_from']))
-            airports_to = connection.execute(select([airports.c.airport_id]). \
-                                             where(airports.c.name == request.form['fly_to']))
-            airport_from = airports_from.fetchone()['airport_id']
-            airport_to = airports_to.fetchone()['airport_id']
-            connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
-                               arrival_time=request.form['fly_arrival_date'],
-                               departure_airport=airport_from, arrival_airport=airport_to,
-                               plane_code=request.form['plane_code'])
-            connection.close()
+            #SERIALIZABLE xk se un utente cerca un volo e nel mentre che cerca è inserito non si creano voli fantasma
+            with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+
+                airports_from = connection.execute(select([airports.c.airport_id]). \
+                                                   where(airports.c.name == request.form['fly_from']))
+                airports_to = connection.execute(select([airports.c.airport_id]). \
+                                                 where(airports.c.name == request.form['fly_to']))
+                airport_from = airports_from.fetchone()['airport_id']
+                airport_to = airports_to.fetchone()['airport_id']
+                connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
+                                   arrival_time=request.form['fly_arrival_date'],
+                                   departure_airport=airport_from, arrival_airport=airport_to,
+                                   plane_code=request.form['plane_code'])
+
     return redirect(url_for('users_account.profile'))
 
 
