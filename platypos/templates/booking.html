@@ -66,6 +66,21 @@
                                                    value="{{ row['flight_code'] }}">
                                         </div>
                                     </div>
+                                    <!--<div class="col-sm">
+                                        <div class="form-group">
+                                            <label for="SeatNumber">Posto</label>
+                                            <select class="form-control" id="FromInput" name="fly_from" required>
+                                                {% for count in num %}
+                                                    {% for colonna in colonne %}
+                                                        {% if not  in booked_seats|map(attribute= %}
+                                                            <option>{{ row['name'] }}</option>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <br>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>-->
                                     <div class="col-sm">
                                         <div class="form-group">
                                             {% if logged_in %}

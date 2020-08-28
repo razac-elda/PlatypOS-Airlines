@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-    <div class="card">
+    <div class="card row-space">
         <h5 class="card-header">
             Inserisci nuovo volo
         </h5>
@@ -72,13 +72,7 @@
             </form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm row-space">
-            <a href="/utente/profilo/logout" class="btn btn-warning">Logout</a>
-        </div>
-    </div>
-
-    <div class="card">
+    <div class="card row-space">
         <h5 class="card-header"> Inserisci aeroporto</h5>
         <div class="card-body">
             <form action="/utente/profilo/nuovo_aeroporto" method="POST">
@@ -109,8 +103,7 @@
             </form>
         </div>
     </div>
-
-    <div class="card">
+    <div class="card row-space">
         <h5 class="card-header"> Inserisci nuovo aereo</h5>
         <div class="card-body">
             <form action="/utente/profilo/nuovo_aereo" method="POST">
@@ -119,7 +112,7 @@
                         <div class="form-group">
                             <label for="FromInput">Posti totali</label>
                             <!-- i posti devo essere multipli di 10,come le file verticali-->
-                            <input type="number" class="form-control" name="plane_seats" step="10"
+                            <input type="number" class="form-control" name="plane_seats" step="5"
                                    placeholder="Inserire numero posti" required>
                         </div>
                     </div>
@@ -131,21 +124,9 @@
             </form>
         </div>
     </div>
-
-    {% for colonna in colonne %}
-        {{ colonna }}
-    {% endfor %}
-    <br>
-    {% for count in num %}
-        {% for colonna in colonne %}
-            {% if colonna+count in prenotati %}
-                <input type="radio" name="seat_place" value="{{colonna}}{{count}}" disabled >
-            {% else %}
-                <input type="radio" name="seat_place" value="{{colonna}}{{count}}" >
-            {% endif %}
-        {% endfor %}
-        <br>
-    {% endfor %}
-
-
+    <div class="row">
+        <div class="col-sm row-space">
+            <a href="/utente/profilo/logout" class="btn btn-warning">Logout</a>
+        </div>
+    </div>
 {% endblock contenuto %}

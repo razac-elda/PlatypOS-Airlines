@@ -38,9 +38,19 @@ def book_outbound():
             " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure")
         connection = engine.connect()
         outbound = connection.execute(s, provincefrom=flyFrom, provinceto=flyTo, departure=flyDepDate)
+        # booked_flights = connection.execute(select([bookings.c.flight_code]). \
+        #                                     order_by(bookings.c.flight_code))
+        # booked_seats = {}
+        # for flight in booked_flights:
+        #     # Posti aereo?
+        #     seats = connection.execute(select([bookings.c.seat_column, bookings.c.seat_number]). \
+        #                                where(bookings.c.flight_code == flight['flight_code']))
+        #     for row in seats:
+        #         merge = row['seat_column'] + "" + str(row['seat_number'])
+        #         booked_seats[flight['flight_code']].append(merge)
         connection.close()
         return render_template('booking.html', active_menu=0, flyReturnDate=flyReturnDate, book_outbound=True,
-                               results_outbound=outbound,
+                               results_outbound=outbound,  # booked_seats=booked_seats,
                                logged_in=current_user.is_authenticated)
     return redirect(url_for('main.homepage'))
 
