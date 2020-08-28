@@ -179,3 +179,21 @@ def form_register():
                 return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
 
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
+
+@users_account.route('/profilo/posti')
+def show_places():
+    colonne = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L']
+    num = []
+    for i in range(1, 11):
+        num.append(str(i))
+
+    with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+        l=connection.execute("SELECT * FROM bookings WHERE flight_code=1")
+        lista=[];
+        for row in l:
+            temp=row['column']+""+str(row['seat_number'])
+            lista.append(temp)
+
+        print(lista)
+    return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
+                           colonne=colonne, num=num , prenotati=lista)

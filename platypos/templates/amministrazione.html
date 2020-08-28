@@ -132,4 +132,20 @@
         </div>
     </div>
 
+    {% for colonna in colonne %}
+        {{ colonna }}
+    {% endfor %}
+    <br>
+    {% for count in num %}
+        {% for colonna in colonne %}
+            {% if colonna+count in prenotati %}
+                <input type="radio" name="seat_place" value="{{colonna}}{{count}}" disabled >
+            {% else %}
+                <input type="radio" name="seat_place" value="{{colonna}}{{count}}" >
+            {% endif %}
+        {% endfor %}
+        <br>
+    {% endfor %}
+
+
 {% endblock contenuto %}
