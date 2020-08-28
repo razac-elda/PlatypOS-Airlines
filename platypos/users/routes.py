@@ -14,9 +14,9 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 def profile():
     if current_user.is_authenticated:
         if current_user.get_permission() > 0:
-            #query tooltip dei voli
-            #crea una connessione che è una transazione
-           #serializable: altri amministratori possono aggiungere areoporti
+            # query tooltip dei voli
+            # crea una connessione che è una transazione
+            # serializable: altri amministratori possono aggiungere areoporti
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
 
                 planes = connection.execute(select([airplanes.c.plane_code]). \
@@ -45,15 +45,15 @@ def change_password():
         if request.method == 'POST':
             connection = engine.connect()
             results = connection.execute(select([users.c.password]). \
-                                                 where(users.c.user_id == current_user.get_id()))
+                                         where(users.c.user_id == current_user.get_id()))
 
             connection.close()
             password = results.fetchone()['password']
             if bcrypt.check_password_hash(password, request.form['old_psw']):
                 hashed_password = bcrypt.generate_password_hash(request.form['new_psw']).decode('utf-8')
-                #la connessione è interpretata come una transazione
-                #non serve chudere la connessione xk dopo il blocco with viene chiusa in automatico
-                #repeatabla read xk anche se piu utenti modificano le relative password contemporaneamente non ci dovrebbero essere problemi
+                # la connessione è interpretata come una transazione
+                # non serve chudere la connessione xk dopo il blocco with viene chiusa in automatico
+                # repeatabla read xk anche se piu utenti modificano le relative password contemporaneamente non ci dovrebbero essere problemi
                 with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
                     connection.execute(users.update().values(password=hashed_password). \
                                        where(users.c.user_id == current_user.get_id()))
@@ -69,9 +69,8 @@ def change_password():
 def new_flight():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
-            #SERIALIZABLE xk se un utente cerca un volo e nel mentre che cerca è inserito non si creano voli fantasma
+            # SERIALIZABLE xk se un utente cerca un volo e nel mentre che cerca è inserito non si creano voli fantasma
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
-
                 airports_from = connection.execute(select([airports.c.airport_id]). \
                                                    where(airports.c.name == request.form['fly_from']))
                 airports_to = connection.execute(select([airports.c.airport_id]). \
@@ -85,20 +84,17 @@ def new_flight():
 
     return redirect(url_for('users_account.profile'))
 
+
 @users_account.route('/profilo/nuovo_aeroporto', methods=['GET', 'POST'])
 def new_airport():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
-
-              #  max = connection.execute("SELECT MAX(airport_id)+1 FROM airports")
-              #  max = connection.execute(select([func.max(airports.c.airport_id,type_=Integer)]))
-
-
                 connection.execute(airports.insert(),
                                    name=request.form['airport_name'],
                                    city=request.form['city'],
                                    province=request.form['province'])
+
     return redirect(url_for('users_account.profile'))
 
 
@@ -123,7 +119,7 @@ def form_login():
     if current_user.is_authenticated:
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
-        #rilassato il vincolo read committed xk la email e il nome e cognome non possono essere toccati da altre query
+        # rilassato il vincolo read committed xk la email e il nome e cognome non possono essere toccati da altre query
         with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
             # Vengono prelevate la password e l'id corrispondenti alla mail
             results = connection.execute(select([users.c.password, users.c.user_id]). \
@@ -171,5 +167,3 @@ def form_register():
                 return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False, exist=True)
 
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
-
-
