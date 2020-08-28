@@ -16,8 +16,8 @@ def profile():
         if current_user.get_permission() > 0:
             #query tooltip dei voli
             #crea una connessione che è una transazione
-            #altri amministratori in questo progetto non possono modificare gli areoporti arerei e codice dell'aereo
-            with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+           #serializable: altri amministratori possono aggiungere areoporti
+            with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
 
                 planes = connection.execute(select([airplanes.c.plane_code]). \
                                             order_by(airplanes.c.plane_code))
@@ -83,6 +83,22 @@ def new_flight():
                                    departure_airport=airport_from, arrival_airport=airport_to,
                                    plane_code=request.form['plane_code'])
 
+    return redirect(url_for('users_account.profile'))
+
+@users_account.route('/profilo/nuovo_aeroporto', methods=['GET', 'POST'])
+def new_airport():
+    if current_user.is_authenticated and current_user.get_permission() > 0:
+        if request.method == 'POST':
+            with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+
+              #  max = connection.execute("SELECT MAX(airport_id)+1 FROM airports")
+              #  max = connection.execute(select([func.max(airports.c.airport_id,type_=Integer)]))
+
+
+                connection.execute(airports.insert(),
+                                   name=request.form['airport_name'],
+                                   city=request.form['city'],
+                                   province=request.form['province'])
     return redirect(url_for('users_account.profile'))
 
 

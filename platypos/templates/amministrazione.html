@@ -77,4 +77,36 @@
             <a href="/utente/profilo/logout" class="btn btn-warning">Logout</a>
         </div>
     </div>
+
+    <div class="card">
+        <h5 class="card-header"> Inserisci aeroporto</h5>
+        <div class="card-body">
+            <form action="/utente/profilo/nuovo_aeroporto" method="POST">
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="FromInput">Nome</label>
+                            <input type="text" class="form-control" name="airport_name" required></div>
+                        </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="FromInput">Città</label>
+                            <input type="text" class="form-control" name="city" required>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <label for="FromInput">Provincia</label>
+                            <input type="text" class="form-control" name="province" required>
+                        </div>
+
+                    </div>
+                    <div class="col-sm">
+                        <label for="Insert">Verificare correttezza dati!</label>
+                        <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock contenuto %}
