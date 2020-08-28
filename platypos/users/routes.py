@@ -180,20 +180,36 @@ def form_register():
 
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
 
+
 @users_account.route('/profilo/posti')
 def show_places():
     colonne = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L']
     num = []
+
+
     for i in range(1, 11):
         num.append(str(i))
+        # crea la transazione e la gestisce
+        #serializable in modo tale che altri utenti non rubino il posto
+    conn = engine.connect().execution_options(isolation_level="SERIALIZABLE")
+    trans = conn.begin()
 
-    with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
-        l=connection.execute("SELECT * FROM bookings WHERE flight_code=1")
-        lista=[];
+    try:
+        l = conn.execute("SELECT * FROM bookings WHERE flight_code=1")
+        lista = []
         for row in l:
-            temp=row['column']+""+str(row['seat_number'])
+            temp = row['column'] + "" + str(row['seat_number'])
             lista.append(temp)
-
+        trans.commit()
+        # passare il messaggio msg all'html x avvisare l'utente
+        msg = text("Prenotazione andata a buon fine!")
+        #lista stampata x debug
         print(lista)
-    return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
-                           colonne=colonne, num=num , prenotati=lista)
+        return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
+                               colonne=colonne, num=num, prenotati=lista)
+    except:
+        trans.rollback()
+        # passare il messaggio msg all'html x avvisare l'utente
+        msg = text("accidenti ti hanno appena rubato il posto!")
+        return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
+                               colonne=colonne, num=num, prenotati=lista)
