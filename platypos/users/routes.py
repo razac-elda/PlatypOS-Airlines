@@ -89,11 +89,23 @@ def new_flight():
 def new_airport():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
+            # livello di isolamento serializable perchè se altri amministratori metto dentro aeroporti con lo stesso nome esempio si possono creare fantasmi
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
                 connection.execute(airports.insert(),
                                    name=request.form['airport_name'],
                                    city=request.form['city'],
                                    province=request.form['province'])
+
+    return redirect(url_for('users_account.profile'))
+
+
+@users_account.route('/profilo/nuovo_aereo', methods=['GET', 'POST'])
+def new_plane():
+    if current_user.is_authenticated and current_user.get_permission() > 0:
+        if request.method == 'POST':
+            # livello di isolamento serializable perchè se altri amministratori metto dentro aerei con lo stesso nome esempio si possono creare fantasmi
+            with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+                connection.execute(airplanes.insert(), seats=request.form['plane_seats'])
 
     return redirect(url_for('users_account.profile'))
 
