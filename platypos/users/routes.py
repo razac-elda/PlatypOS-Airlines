@@ -32,8 +32,15 @@ def profile():
                                    logged_in=current_user.is_authenticated)
         else:
             # Viene utilizzata la sessione dell'utente per ottenere i suoi dati personali
+            with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+                s = text(
+                    "SELECT a1.name as departure_airport, a2.name as arrival_airport, f.departure_time as departure_time, f.arrival_time as arrival_time, f.plane_code as plane_code, b.seat_column as seat_column, b.seat_number as seat_number, f.flight_code as flight_code "
+                    " FROM bookings b JOIN flights f ON b.flight_code=f.flight_code JOIN airports a1 ON a1.airport_id=f.departure_airport JOIN airports a2 ON a2.airport_id=f.arrival_airport"
+                    " WHERE b.user_id=:user_id")
+                user_bookings = connection.execute(s, user_id=current_user.get_id())
             return render_template('profilo.html', title='Profilo personale', name=current_user.get_name(),
                                    surname=current_user.get_surname(), email=current_user.get_mail(),
+                                   bookings=user_bookings,
                                    logged_in=current_user.is_authenticated)
     else:
         return redirect(url_for('users_account.access_page'))

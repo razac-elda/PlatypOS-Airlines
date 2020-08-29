@@ -87,8 +87,9 @@
                                     <div class="form-group">
                                         {% if logged_in %}
                                             {% if book_outbound %}
+                                                <label FOR="Book">Prenota subito!</label>
                                                 <button type="submit" name="book_outbound" value="True"
-                                                        class="btn btn-info">Prenota
+                                                        class="btn btn-warning" id="Book">Prenota
                                                 </button>
                                                 {% if flyReturnDate %}
                                                     <input type="hidden" name="book_return" value="False"/>
