@@ -34,11 +34,12 @@ def book():
                 flyReturnDate = request.form['fly_return_date']
         else:
             if request.form['book_outbound'] == 'True':
-                connection = engine.connect()
-                connection.execute(bookings.insert(), seat_number=1, seat_column='A', user_id=current_user.get_id(),
-                                   flight_code=request.form['flight_code'])
-                connection.close()
-                if request.form['fly_return_date']:
+                if request.form['return'] == 'True':
+                    seat_list = request.form['seats'].split('-')
+                    connection = engine.connect()
+                    connection.execute(bookings.insert(), seat_number=seat_list[1], seat_column=seat_list[0], user_id=current_user.get_id(),
+                                       flight_code=request.form['flight_code'])
+                    connection.close()
                     flyFrom = request.form['province_to']
                     flyTo = request.form['province_from']
                     flyDepDate = request.form['fly_return_date']
@@ -61,10 +62,8 @@ def book():
                 for row in seats:
                     merge = row['seat_column'] + str(row['seat_number'])
                     temp_list.append(merge)
-
-                booked_seats[flight['flight_code']].append(temp_list)
-
-                connection.close()
+                booked_seats[flight['flight_code']] = temp_list
+            connection.close()
             if request.form['search'] == 'True':
                 return render_template('booking.html', active_menu=0, flyReturnDate=flyReturnDate, book_outbound=True,
                                        results=outbound, booked_seats=booked_seats, column_char=column_char,
@@ -75,8 +74,9 @@ def book():
                                        booked_seats=booked_seats, column_char=column_char,
                                        logged_in=current_user.is_authenticated)
         else:
+            seat_list = request.form['seats'].split('-')
             connection = engine.connect()
-            connection.execute(bookings.insert(), seat_number=1, seat_column='A', user_id=current_user.get_id(),
+            connection.execute(bookings.insert(), seat_number=seat_list[1], seat_column=seat_list[0], user_id=current_user.get_id(),
                                flight_code=request.form['flight_code'])
             connection.close()
     return redirect(url_for('main.homepage'))

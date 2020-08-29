@@ -76,7 +76,7 @@
                                             {% for char in column_char %}
                                                 {% for num in range(1,((row['seats']/5) + 1)|int) %}
                                                     {% if not char+num|string in booked_seats|map(attribute=row['flight_code']) %}
-                                                        <option value="{{ char+'-'+num|string }}">{{ char+num|string }}</option>
+                                                        <option value="{{ char+'-'+num|string }}">{{ char+num|string }} {{ booked_seats }}</option>
                                                     {% endif %}
                                                 {% endfor %}
                                             {% endfor %}
@@ -92,7 +92,9 @@
                                                 </button>
                                                 {% if flyReturnDate %}
                                                     <input type="hidden" name="book_return" value="False"/>
+                                                    <input type="hidden" name="return" value="True"/>
                                                 {% else %}
+                                                    <input type="hidden" name="return" value="False"/>
                                                     <input type="hidden" name="book_return" value="True"/>
                                                 {% endif %}
                                                 <input type="hidden" name="search" value="False"/>
