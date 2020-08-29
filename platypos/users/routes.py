@@ -186,11 +186,10 @@ def show_places():
     colonne = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L']
     num = []
 
-
     for i in range(1, 11):
         num.append(str(i))
         # crea la transazione e la gestisce
-        #serializable in modo tale che altri utenti non rubino il posto
+        # serializable in modo tale che altri utenti non rubino il posto
     conn = engine.connect().execution_options(isolation_level="SERIALIZABLE")
     trans = conn.begin()
 
@@ -203,13 +202,27 @@ def show_places():
         trans.commit()
         # passare il messaggio msg all'html x avvisare l'utente
         msg = text("Prenotazione andata a buon fine!")
-        #lista stampata x debug
+        # lista stampata x debug
         print(lista)
-        return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
+        return render_template('amministrazione.html', title='Posti', logged_in=current_user.is_authenticated,
                                colonne=colonne, num=num, prenotati=lista)
     except:
         trans.rollback()
         # passare il messaggio msg all'html x avvisare l'utente
         msg = text("accidenti ti hanno appena rubato il posto!")
-        return render_template('amministrazione.html', title='posti', logged_in=current_user.is_authenticated,
+        return render_template('amministrazione.html', title='Posti', logged_in=current_user.is_authenticated,
                                colonne=colonne, num=num, prenotati=lista)
+
+
+@users_account.route('/profilo/statistiche')
+def statistics():
+    with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+
+        top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as numero_voli"
+                                         " FROM bookings b JOIN users u ON b.user_id = u.user_id"
+                                         " GROUP BY b.user_id, u.name, u.surname"
+                                         " ORDER BY numero_voli desc"
+                                         " LIMIT 10")
+
+    return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
+                           top_clients=top_clients)

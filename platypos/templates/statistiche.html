@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+
+   <h1> STATISTICHE </h1>
+
+
+    <h4> Clienti Fedeli</h4>
+    {% for user in top_clients %}
+        <p> {{ user['user_id']  }}  {{ user['name']  }} {{ user['surname']  }} {{ user['numero_voli']  }} </p>
+    {% endfor %}
+
+
+{% endblock contenuto %}
