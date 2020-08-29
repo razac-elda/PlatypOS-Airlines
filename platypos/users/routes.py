@@ -217,12 +217,17 @@ def show_places():
 @users_account.route('/profilo/statistiche')
 def statistics():
     with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
-
-        top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as numero_voli"
+        top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as flights_number"
                                          " FROM bookings b JOIN users u ON b.user_id = u.user_id"
                                          " GROUP BY b.user_id, u.name, u.surname"
-                                         " ORDER BY numero_voli desc"
+                                         " ORDER BY flights_number desc"
                                          " LIMIT 10")
 
+        flights_per_year = connection.execute(
+            " SELECT  CAST( date_part('year', departure_time)as int )  as years, count(*) as flights_number"
+            " FROM flights"
+            " GROUP BY years "
+            " ORDER BY years desc")
+
     return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
-                           top_clients=top_clients)
+                           top_clients=top_clients, flights_per_year=flights_per_year)

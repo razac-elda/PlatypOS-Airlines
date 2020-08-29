@@ -6,8 +6,15 @@
 
     <h4> Clienti Fedeli</h4>
     {% for user in top_clients %}
-        <p> {{ user['user_id']  }}  {{ user['name']  }} {{ user['surname']  }} {{ user['numero_voli']  }} </p>
+        <p> {{ user['user_id']  }}  {{ user['name']  }} {{ user['surname']  }} {{ user['flights_number']  }} </p>
     {% endfor %}
+
+    <h4> Voli per anno </h4>
+    {% for flight in flights_per_year %}
+        <p> {{ flight['years'] }}  {{ flight['flights_number']  }}  </p>
+    {% endfor %}
+
+
 
 
 {% endblock contenuto %}
