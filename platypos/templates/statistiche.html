@@ -14,7 +14,9 @@
         <p> {{ flight['years'] }}  {{ flight['flights_number']  }}  </p>
     {% endfor %}
 
-
-
+     <h4> Media prenotazioni per cliente per anno</h4>
+        {% for avg in avg_booking_per_year %}
+            <p> {{ avg['years'] }}  {{ avg['average']  }}  </p>
+        {% endfor %}
 
 {% endblock contenuto %}

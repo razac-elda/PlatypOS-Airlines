@@ -229,5 +229,14 @@ def statistics():
             " GROUP BY years "
             " ORDER BY years desc")
 
+        avg_booking_per_year = connection.execute(" SELECT CAST( date_part('year', f.departure_time)as int ) as years ,"
+                                                  " CASE WHEN count(distinct b.user_id) > 0 THEN   CAST( count(b.booking_id)AS DOUBLE PRECISION)/CAST(count(distinct b.user_id)AS DOUBLE PRECISION)"
+                                                  " ELSE 0 END"
+                                                  " AS average"
+                                                  " FROM flights f LEFT JOIN bookings b ON f.flight_code = b.flight_code"
+                                                  " GROUP BY years"
+                                                  )
+
     return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
-                           top_clients=top_clients, flights_per_year=flights_per_year)
+                           top_clients=top_clients, flights_per_year=flights_per_year,
+                           avg_booking_per_year=avg_booking_per_year)
