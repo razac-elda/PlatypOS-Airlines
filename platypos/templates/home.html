@@ -8,7 +8,7 @@
             Dove vuoi andare?
         </h5>
         <div class="card-body">
-            <form action="/book_outbound" method="POST">
+            <form action="/book" method="POST">
                 <div class="container">
                     <div class="row">
                         <div class="col-sm">
@@ -62,7 +62,10 @@
                     </div>
                     <div class="row row-space">
                         <div class="col-sm">
-                            <button type="submit" class="btn btn-warning btn-block">Cerca</button>
+                            <button type="submit" name="search" value="True" class="btn btn-warning btn-block">Cerca
+                            </button>
+                            <input type="hidden" name="book_outbound" value="False"/>
+                            <input type="hidden" name="book_return" value="False"/>
                         </div>
                     </div>
                 </div>
