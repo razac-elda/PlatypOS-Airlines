@@ -188,12 +188,13 @@ def form_register():
 def statistics():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         # Creazione statistiche
+        # REPEATABLE READ per evitare che una riga cambi valore
         with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
             s = text(
                 " SELECT u.name, u.surname, b.user_id , COUNT(*) as flights_number"
                 " FROM bookings b JOIN users u ON b.user_id = u.user_id"
                 " GROUP BY b.user_id, u.name, u.surname"
-                " ORDER BY flights_number desc"
+                " ORDER BY flights_number DESC"
                 " LIMIT 10"
             )
             top_clients = connection.execute(s)
@@ -206,7 +207,7 @@ def statistics():
             flights_per_year = connection.execute(s)
             s = text(
                 " SELECT CAST( date_part('year', f.departure_time)as int ) as years ,"
-                " CASE WHEN count(distinct b.user_id) > 0 THEN   CAST( count(b.booking_id)AS DOUBLE PRECISION)/CAST(count(distinct b.user_id)AS DOUBLE PRECISION)"
+                " CASE WHEN count(distinct b.user_id) > 0 THEN CAST(count(b.booking_id)AS DOUBLE PRECISION)/CAST(count(distinct b.user_id)AS DOUBLE PRECISION)"
                 " ELSE 0 END"
                 " AS average"
                 " FROM flights f LEFT JOIN bookings b ON f.flight_code = b.flight_code"
@@ -215,9 +216,9 @@ def statistics():
             avg_booking_per_year = connection.execute(s)
             s = text(
                 "SELECT f1.plane_code, count(f1.plane_code) as numero_posti"
-                " FROM airplanes a1 join flights f1 on a1.plane_code=f1.plane_code "
-                " join bookings b1 on f1.flight_code=b1.flight_code"
-                " where CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
+                " FROM airplanes a1 JOIN flights f1 ON a1.plane_code=f1.plane_code "
+                " JOIN bookings b1 ON f1.flight_code=b1.flight_code"
+                " WHERE CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
                 " GROUP BY f1.plane_code"
             )
             plane_with_places = connection.execute(s)

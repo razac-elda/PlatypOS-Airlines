@@ -1,4 +1,4 @@
-# Test
+# Selezionare questo file per il target
 
 from platypos import app
 
