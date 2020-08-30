@@ -86,10 +86,15 @@ def new_flight():
                                                  where(airports.c.name == request.form['fly_to']))
                 airport_from = airports_from.fetchone()['airport_id']
                 airport_to = airports_to.fetchone()['airport_id']
-                connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
-                                   arrival_time=request.form['fly_arrival_date'],
-                                   departure_airport=airport_from, arrival_airport=airport_to,
-                                   plane_code=request.form['plane_code'])
+                try:
+                    connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
+                                       arrival_time=request.form['fly_arrival_date'],
+                                       departure_airport=airport_from, arrival_airport=airport_to,
+                                       plane_code=request.form['plane_code'])
+                except:
+                    msg = "Presta più attenzione ai campi inseriti, l'operazione non è andata a buon fine!"
+                    return render_template('errors.html', msg=msg)
+
     return redirect(url_for('users_account.profile'))
 
 

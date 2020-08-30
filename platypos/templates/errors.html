@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block contenuto %}
+
+
+    <h6>Si è verificato un errore nel database, tornare alla pagina precedente </h6>
+    {% if msg  %}
+    <h5> ERRORE :<br>
+        {{ msg }}
+    </h5>
+    {% endif %}
+{% endblock contenuto %}
+
