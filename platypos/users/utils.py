@@ -4,9 +4,11 @@ from platypos.models import *
 
 @login_manager.user_loader
 def load_user(uid):
-    connection = engine.connect()
-    result = connection.execute(select([users]). \
-                                where(users.c.user_id == uid))
+    # Vengono prelevati i dati di un utente per la creazione di un istanza di User
+    # READ COMMITTED è sufficiente perchè l'utente che si logga avrà già un account
+    with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
+        result = connection.execute(select([users]). \
+                                    where(users.c.user_id == uid))
     email = None
     name = None
     surname = None

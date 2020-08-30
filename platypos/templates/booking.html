@@ -72,6 +72,7 @@
                                 <div class="col-sm">
                                     <div class="form-group">
                                         <label for="SeatNumber">Posto</label>
+                                        <!-- Vengono visualizzati tutti i posti dell'aereo - posti prenotati -->
                                         <select class="form-control" id="SeatNumber" name="seats" required>
                                             {% for char in column_char %}
                                                 {% for num in range(1,((row['seats']/5) + 1)|int) %}
