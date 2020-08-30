@@ -32,8 +32,15 @@ def profile():
                                    logged_in=current_user.is_authenticated)
         else:
             # Viene utilizzata la sessione dell'utente per ottenere i suoi dati personali
+            with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+                s = text(
+                    "SELECT a1.name as departure_airport, a2.name as arrival_airport, f.departure_time as departure_time, f.arrival_time as arrival_time, f.plane_code as plane_code, b.seat_column as seat_column, b.seat_number as seat_number, f.flight_code as flight_code "
+                    " FROM bookings b JOIN flights f ON b.flight_code=f.flight_code JOIN airports a1 ON a1.airport_id=f.departure_airport JOIN airports a2 ON a2.airport_id=f.arrival_airport"
+                    " WHERE b.user_id=:user_id")
+                user_bookings = connection.execute(s, user_id=current_user.get_id())
             return render_template('profilo.html', title='Profilo personale', name=current_user.get_name(),
                                    surname=current_user.get_surname(), email=current_user.get_mail(),
+                                   bookings=user_bookings,
                                    logged_in=current_user.is_authenticated)
     else:
         return redirect(url_for('users_account.access_page'))
@@ -181,48 +188,36 @@ def form_register():
     return render_template('autenticazione.html', title='Accedi / Registrati', logged_in=False)
 
 
-@users_account.route('/profilo/posti')
-def show_places():
-    colonne = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'L']
-    num = []
-
-    for i in range(1, 11):
-        num.append(str(i))
-        # crea la transazione e la gestisce
-        # serializable in modo tale che altri utenti non rubino il posto
-    conn = engine.connect().execution_options(isolation_level="SERIALIZABLE")
-    trans = conn.begin()
-
-    try:
-        l = conn.execute("SELECT * FROM bookings WHERE flight_code=1")
-        lista = []
-        for row in l:
-            temp = row['column'] + "" + str(row['seat_number'])
-            lista.append(temp)
-        trans.commit()
-        # passare il messaggio msg all'html x avvisare l'utente
-        msg = text("Prenotazione andata a buon fine!")
-        # lista stampata x debug
-        print(lista)
-        return render_template('amministrazione.html', title='Posti', logged_in=current_user.is_authenticated,
-                               colonne=colonne, num=num, prenotati=lista)
-    except:
-        trans.rollback()
-        # passare il messaggio msg all'html x avvisare l'utente
-        msg = text("accidenti ti hanno appena rubato il posto!")
-        return render_template('amministrazione.html', title='Posti', logged_in=current_user.is_authenticated,
-                               colonne=colonne, num=num, prenotati=lista)
-
-
 @users_account.route('/profilo/statistiche')
 def statistics():
     with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
-
-        top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as numero_voli"
+        top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as flights_number"
                                          " FROM bookings b JOIN users u ON b.user_id = u.user_id"
                                          " GROUP BY b.user_id, u.name, u.surname"
-                                         " ORDER BY numero_voli desc"
+                                         " ORDER BY flights_number desc"
                                          " LIMIT 10")
 
+        flights_per_year = connection.execute(
+            " SELECT  CAST( date_part('year', departure_time)as int )  as years, count(*) as flights_number"
+            " FROM flights"
+            " GROUP BY years "
+            " ORDER BY years desc")
+
+        avg_booking_per_year = connection.execute(" SELECT CAST( date_part('year', f.departure_time)as int ) as years ,"
+                                                  " CASE WHEN count(distinct b.user_id) > 0 THEN   CAST( count(b.booking_id)AS DOUBLE PRECISION)/CAST(count(distinct b.user_id)AS DOUBLE PRECISION)"
+                                                  " ELSE 0 END"
+                                                  " AS average"
+                                                  " FROM flights f LEFT JOIN bookings b ON f.flight_code = b.flight_code"
+                                                  " GROUP BY years"
+                                                  )
+
+        plane_with_places = connection.execute("SELECT f1.plane_code, count(f1.plane_code) as numero_posti"
+                                             " FROM airplanes a1 join flights f1 on a1.plane_code=f1.plane_code "
+                                             " join bookings b1 on f1.flight_code=b1.flight_code"
+                                             " where CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
+                                             " GROUP BY f1.plane_code")
+
     return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
-                           top_clients=top_clients)
+                           top_clients=top_clients, flights_per_year=flights_per_year,
+                           avg_booking_per_year=avg_booking_per_year,
+                           plane_with_places=plane_with_places)

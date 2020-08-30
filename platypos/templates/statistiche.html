@@ -6,8 +6,21 @@
 
     <h4> Clienti Fedeli</h4>
     {% for user in top_clients %}
-        <p> {{ user['user_id']  }}  {{ user['name']  }} {{ user['surname']  }} {{ user['numero_voli']  }} </p>
+        <p> {{ user['user_id']  }}  {{ user['name']  }} {{ user['surname']  }} {{ user['flights_number']  }} </p>
     {% endfor %}
 
+    <h4> Voli per anno </h4>
+    {% for flight in flights_per_year %}
+        <p> {{ flight['years'] }}  {{ flight['flights_number']  }}  </p>
+    {% endfor %}
 
+     <h4> Media prenotazioni per cliente per anno</h4>
+        {% for avg in avg_booking_per_year %}
+            <p> {{ avg['years'] }}  {{ avg['average']  }}  </p>
+        {% endfor %}
+
+    <h4> Aerei con numero posti prenotati dal 2000 ad oggi </h4>
+        {% for plane in plane_with_places %}
+            <p> {{ plane['plane_code'] }}  {{ plane['numero_posti']  }}  </p>
+        {% endfor %}
 {% endblock contenuto %}
