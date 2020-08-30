@@ -211,6 +211,13 @@ def statistics():
                                                   " GROUP BY years"
                                                   )
 
+        plane_with_places = connection.execute("SELECT f1.plane_code, count(f1.plane_code) as numero_posti"
+                                             " FROM airplanes a1 join flights f1 on a1.plane_code=f1.plane_code "
+                                             " join bookings b1 on f1.flight_code=b1.flight_code"
+                                             " where CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
+                                             " GROUP BY f1.plane_code")
+
     return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
                            top_clients=top_clients, flights_per_year=flights_per_year,
-                           avg_booking_per_year=avg_booking_per_year)
+                           avg_booking_per_year=avg_booking_per_year,
+                           plane_with_places=plane_with_places)

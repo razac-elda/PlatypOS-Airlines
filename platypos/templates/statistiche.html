@@ -19,4 +19,8 @@
             <p> {{ avg['years'] }}  {{ avg['average']  }}  </p>
         {% endfor %}
 
+    <h4> Aerei con numero posti prenotati dal 2000 ad oggi </h4>
+        {% for plane in plane_with_places %}
+            <p> {{ plane['plane_code'] }}  {{ plane['numero_posti']  }}  </p>
+        {% endfor %}
 {% endblock contenuto %}
