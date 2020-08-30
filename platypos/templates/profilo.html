@@ -82,11 +82,68 @@
             Voli prenotati
         </h5>
         <div class="card-body">
-            {% if bookings %}
-
-            {% else %}
-                Nessuna prenotazione
-            {% endif %}
+            {% for row in bookings %}
+                <div class="card row-space">
+                    <div class="container">
+                        <div class="row row-space">
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="FromResult">Da:<br>{{ row['departure_airport'] }} </label>
+                                    <input type="hidden" class="form-control" id="FromResult"
+                                           name="departure_airport"
+                                           value="{{ row['departure_airport'] }}">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="ToResult">A:<br>{{ row['arrival_airport'] }} </label>
+                                    <input type="hidden" class="form-control" id="ToResult"
+                                           name="arrival_airport"
+                                           value="{{ row['arrival_airport'] }}">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="DateStartResult">Partenza:<br>{{ row['departure_time'] }}
+                                    </label>
+                                    <input type="hidden" class="form-control" id="DateStartResult"
+                                           name="fly_dep_date"
+                                           value="{{ row['departure_time'] }}">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="DateEndResult">Arrivo:<br>{{ row['arrival_time'] }} </label>
+                                    <input type="hidden" class="form-control" id="DateEndResult"
+                                           name="fly_arrival_date"
+                                           value="{{ row['arrival_time'] }}">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="PlaneCode">Aereo:<br>{{ row['plane_code'] }} </label>
+                                    <input type="hidden" class="form-control" id="PlaneCode"
+                                           name="plane_code"
+                                           value="{{ row['plane_code'] }}">
+                                    <input type="hidden" class="form-control" name="flight_code"
+                                           value="{{ row['flight_code'] }}">
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="SeatNumber">Posto:<br>{{ row['seat_column'] }}{{ row['seat_number'] }}
+                                    </label>
+                                    <input type="hidden" class="form-control" id="SeatNumber"
+                                           name="seat_column"
+                                           value="{{ row['seat_column'] }}">
+                                    <input type="hidden" class="form-control" name="seat_number"
+                                           value="{{ row['seat_number'] }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 {% endblock contenuto %}
