@@ -66,8 +66,8 @@ airports = Table('airports', metadata,
 
 airplanes = Table('airplanes', metadata,
                   Column('plane_code', Integer, primary_key=True),
-                  Column('seats', Integer, nullable=False),
-                  )
+                  Column('seats', Integer, CheckConstraint('seats>0'), nullable=False),
+                )
 
 flights = Table('flights', metadata,
                 Column('flight_code', Integer, primary_key=True),
@@ -76,6 +76,8 @@ flights = Table('flights', metadata,
                 Column('departure_airport', Integer, ForeignKey('airports.airport_id')),
                 Column('arrival_airport', Integer, ForeignKey('airports.airport_id')),
                 Column('plane_code', Integer, ForeignKey('airplanes.plane_code')),
+                CheckConstraint('arrival_time > departure_time'),
+                CheckConstraint('arrival_airport <> departure_airport')
                 )
 
 bookings = Table('bookings', metadata,
@@ -84,6 +86,7 @@ bookings = Table('bookings', metadata,
                  Column('seat_number', Integer, nullable=False),
                  Column('user_id', Integer, ForeignKey('users.user_id')),
                  Column('flight_code', Integer, ForeignKey('flights.flight_code')),
+                 UniqueConstraint('seat_column', 'seat_number', 'flight_code')
                  )
 
 metadata.create_all(engine)
