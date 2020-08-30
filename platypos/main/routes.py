@@ -80,17 +80,20 @@ def book():
                     # dalle possibili scelte
                     booked_seats[flight['flight_code']] = temp_list
             # Visualizzazione della pagina come andata o ritorno
+            permission = -1
+            if current_user.is_authenticated:
+                permission = current_user.get_permission()
             if request.form['search'] == 'True':
                 return render_template('booking.html', active_menu=0, flyReturnDate=flyReturnDate, book_outbound=True,
                                        results=outbound, booked_seats=booked_seats, column_char=column_char,
                                        logged_in=current_user.is_authenticated,
-                                       permission=current_user.get_permission())
+                                       permission=permission)
             else:
                 return render_template('booking.html', active_menu=0, book_outbound=False,
                                        results=outbound,
                                        booked_seats=booked_seats, column_char=column_char,
                                        logged_in=current_user.is_authenticated,
-                                       permission=current_user.get_permission())
+                                       permission=permission)
         else:
             # Inserimento di sola andata oppure ritorno dell'andata con ritorno
             seat_list = request.form['seats'].split('-')

@@ -1,12 +1,10 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-
-
-    <h6>Si è verificato un errore nel database, tornare alla pagina precedente </h6>
-    {% if msg  %}
-    <h5> ERRORE :<br>
-        {{ msg }}
-    </h5>
+    <h6>Si è verificato un errore nel database, tornare alla pagina precedente  ¯\_(ツ)_/¯</h6>
+    {% if error_msg %}
+        <h5> ERRORE :<br>
+            {{ error_msg }}
+        </h5>
     {% endif %}
 {% endblock contenuto %}
 

@@ -76,7 +76,7 @@ flights = Table('flights', metadata,
                 Column('departure_airport', Integer, ForeignKey('airports.airport_id')),
                 Column('arrival_airport', Integer, ForeignKey('airports.airport_id')),
                 Column('plane_code', Integer, ForeignKey('airplanes.plane_code')),
-                CheckConstraint('arrival_time > departure_time'),
+                CheckConstraint('arrival_time >= departure_time'),
                 CheckConstraint('arrival_airport <> departure_airport')
                 )
 

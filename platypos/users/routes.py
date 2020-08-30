@@ -93,8 +93,7 @@ def new_flight():
                                        plane_code=request.form['plane_code'])
                 except:
                     msg = "Presta più attenzione ai campi inseriti, l'operazione non è andata a buon fine!"
-                    return render_template('errors.html', msg=msg)
-
+                    return render_template('errors.html', error_msg=msg, logged_in=current_user.is_authenticated)
     return redirect(url_for('users_account.profile'))
 
 
