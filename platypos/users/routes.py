@@ -14,10 +14,8 @@ users_account = Blueprint('users_account', __name__, template_folder='templates'
 def profile():
     if current_user.is_authenticated:
         if current_user.get_permission() > 0:
-            # query tooltip dei voli
-            # crea una connessione che è una transazione
-            # serializable: altri amministratori possono aggiungere areoporti
-            with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+
+            with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
 
                 planes = connection.execute(select([airplanes.c.plane_code]). \
                                             order_by(airplanes.c.plane_code))
@@ -58,10 +56,8 @@ def change_password():
             password = results.fetchone()['password']
             if bcrypt.check_password_hash(password, request.form['old_psw']):
                 hashed_password = bcrypt.generate_password_hash(request.form['new_psw']).decode('utf-8')
-                # la connessione è interpretata come una transazione
-                # non serve chudere la connessione xk dopo il blocco with viene chiusa in automatico
-                # repeatabla read xk anche se piu utenti modificano le relative password contemporaneamente non ci dovrebbero essere problemi
-                with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+
+                with engine.connect().execution_options(isolation_level="AUTOCOMMIT") as connection:
                     connection.execute(users.update().values(password=hashed_password). \
                                        where(users.c.user_id == current_user.get_id()))
                     return redirect(url_for('users_account.logout'))
@@ -76,7 +72,7 @@ def change_password():
 def new_flight():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
-            # SERIALIZABLE xk se un utente cerca un volo e nel mentre che cerca è inserito non si creano voli fantasma
+
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
                 airports_from = connection.execute(select([airports.c.airport_id]). \
                                                    where(airports.c.name == request.form['fly_from']))
@@ -96,7 +92,7 @@ def new_flight():
 def new_airport():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
-            # livello di isolamento serializable perchè se altri amministratori metto dentro aeroporti con lo stesso nome esempio si possono creare fantasmi
+
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
                 connection.execute(airports.insert(),
                                    name=request.form['airport_name'],
@@ -110,7 +106,7 @@ def new_airport():
 def new_plane():
     if current_user.is_authenticated and current_user.get_permission() > 0:
         if request.method == 'POST':
-            # livello di isolamento serializable perchè se altri amministratori metto dentro aerei con lo stesso nome esempio si possono creare fantasmi
+
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
                 connection.execute(airplanes.insert(), seats=request.form['plane_seats'])
 
@@ -138,9 +134,9 @@ def form_login():
     if current_user.is_authenticated:
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
-        # rilassato il vincolo read committed xk la email e il nome e cognome non possono essere toccati da altre query
+
         with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
-            # Vengono prelevate la password e l'id corrispondenti alla mail
+
             results = connection.execute(select([users.c.password, users.c.user_id]). \
                                          where(users.c.email == request.form['email'].lower()))
         real_password = None
@@ -166,8 +162,8 @@ def form_register():
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
         # Controllo che non esista gia' un utente con la mail passata
-        # SERIALIZABLE xk non vengano creati conflitti se 2 utenti tentano di registrarsi con la stessa email nello stesso momento
-        with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+
+        with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
             results = connection.execute(select([users]). \
                                          where(users.c.email == request.form['new_email'].lower()))
             user_exists = False
@@ -190,7 +186,7 @@ def form_register():
 
 @users_account.route('/profilo/statistiche')
 def statistics():
-    with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+    with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
         top_clients = connection.execute(" SELECT u.name, u.surname, b.user_id , COUNT(*) as flights_number"
                                          " FROM bookings b JOIN users u ON b.user_id = u.user_id"
                                          " GROUP BY b.user_id, u.name, u.surname"
