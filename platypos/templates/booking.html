@@ -16,7 +16,9 @@
                             <div class="row row-space">
                                 <div class="col-sm">
                                     <div class="form-group">
-                                        <label for="FromResult">Da:<br>{{ row['departure_airport'] }} </label>
+                                        <label for="FromResult">Da:<br>{{ row['departure_airport'] }}, {{ row['departure_city'] }}
+                                            ({{ row['province_from'] }}) </label>
+
                                         <input type="hidden" class="form-control" id="FromResult"
                                                name="departure_airport"
                                                value="{{ row['departure_airport'] }}">
@@ -28,7 +30,7 @@
                                 </div>
                                 <div class="col-sm">
                                     <div class="form-group">
-                                        <label for="ToResult">A:<br>{{ row['arrival_airport'] }} </label>
+                                        <label for="ToResult">A:<br>{{ row['arrival_airport'] }}, {{ row['arrival_city'] }} ({{row['province_to'] }}) </label>
                                         <input type="hidden" class="form-control" id="ToResult"
                                                name="arrival_airport"
                                                value="{{ row['arrival_airport'] }}">

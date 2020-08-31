@@ -95,13 +95,13 @@
                         <div class="row row-space">
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="FromResult">Da:<br>{{ row['departure_airport'] }} </label>
+                                    <label for="FromResult">Da:<br>{{ row['departure_airport'] }}, {{ row['departure_city'] }} ({{row['province_from'] }}) </label>
 
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="ToResult">A:<br>{{ row['arrival_airport'] }} </label>
+                                    <label for="ToResult">A:<br>{{ row['arrival_airport'] }}, {{ row['arrival_city'] }} ({{row['province_to'] }}) </label>
                                 </div>
                             </div>
                             <div class="col-sm">
