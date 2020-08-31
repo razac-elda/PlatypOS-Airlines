@@ -241,7 +241,7 @@ def statistics():
                 " JOIN bookings b1 ON f1.flight_code=b1.flight_code"
                 " WHERE CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
                 " GROUP BY f1.plane_code"
-                " ORDER BY numero_posti"
+                " ORDER BY numero_posti DESC"
                 " LIMIT 5"
             )
             plane_with_places = connection.execute(s)
