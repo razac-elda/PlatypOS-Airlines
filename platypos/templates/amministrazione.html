@@ -51,6 +51,53 @@
                             </div>
                         </div>
                         <div class="col-sm">
+                            <label for="hourDep">Orario partenza</label>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+
+                                        <select class="form-control" id="hourDep" name="departure_hour" required>
+                                            {% for row in range(24) %}
+                                                <option>{{ row }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <select class="form-control" name="departure_minute" required>
+                                            {% for row in range(60) %}
+                                                <option>{{ row }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <label for="hourArr">Orario arrivo</label>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <select class="form-control" id="hourArr" name="arrival_hour" required>
+                                            {% for row in range(24) %}
+                                                <option>{{ row }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="form-group">
+                                        <select class="form-control" name="arrival_minute" required>
+                                            {% for row in range(60) %}
+                                                <option>{{ row }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
                             <div class="form-group">
                                 <label for="PlaneCode">Codice aereo</label>
                                 <select class="form-control" id="PlaneCode" name="plane_code" required>
@@ -63,6 +110,8 @@
                                 </select>
                             </div>
                         </div>
+                    </div>
+                    <div class="row row-space">
                         <div class="col-sm">
                             <label for="Insert">Verificare correttezza dati!</label>
                             <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>

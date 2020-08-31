@@ -102,8 +102,9 @@
                                                     {% endif %}
                                                     <input type="hidden" name="search" value="False"/>
                                                 {% else %}
+                                                    <label FOR="Book">Prenota subito!</label>
                                                     <button type="submit" name="book_return" value="True"
-                                                            class="btn btn-info">
+                                                            class="btn btn-warning" id="Book">
                                                         Prenota
                                                     </button>
                                                     <input type="hidden" name="book_outbound" value="False"/>

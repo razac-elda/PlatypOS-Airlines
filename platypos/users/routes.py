@@ -86,9 +86,13 @@ def new_flight():
                                                  where(airports.c.name == request.form['fly_to']))
                 airport_from = airports_from.fetchone()['airport_id']
                 airport_to = airports_to.fetchone()['airport_id']
+                # La data viene unita all'orario per essere salvato in un timestamp nel database
+                departure_time = request.form['fly_dep_date'] + " " + request.form['departure_hour'] + ":" + \
+                                 request.form['departure_minute']
+                arrival_time = request.form['fly_arrival_date'] + " " + request.form['arrival_hour'] + ":" + \
+                               request.form['arrival_minute']
                 try:
-                    connection.execute(flights.insert(), departure_time=request.form['fly_dep_date'],
-                                       arrival_time=request.form['fly_arrival_date'],
+                    connection.execute(flights.insert(), departure_time=departure_time, arrival_time=arrival_time,
                                        departure_airport=airport_from, arrival_airport=airport_to,
                                        plane_code=request.form['plane_code'])
                 except:
