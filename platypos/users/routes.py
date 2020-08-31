@@ -242,6 +242,7 @@ def statistics():
                 " WHERE CAST( date_part('year', f1.departure_time)as int )  BETWEEN 2000 AND date_part('year', CURRENT_DATE)"
                 " GROUP BY f1.plane_code"
                 " ORDER BY numero_posti"
+                " LIMIT 5"
             )
             plane_with_places = connection.execute(s)
         return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
