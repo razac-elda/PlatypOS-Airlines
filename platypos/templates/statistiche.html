@@ -8,33 +8,89 @@
             <div class="row">
                 <div class="col-sm">
                     <h4> Clienti Fedeli</h4>
-                    {% for user in top_clients %}
-                        <p> {{ user['user_id'] }} {{ user['name'] }} {{ user['surname'] }} {{ user['flights_number'] }} </p>
-                    {% endfor %}
+                    <table class="table table-hover">
+                        <thead class="table-info">
+                        <tr>
+                            <th scope="col">User Id</th>
+                            <th scope="col">Nome</th>
+                            <th scope="col">Cognome</th>
+                            <th scope="col">Voli</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for user in top_clients %}
+                            <tr>
+                                <th scope="row">{{ user['user_id'] }}</th>
+                                <td>{{ user['name'] }}</td>
+                                <td>{{ user['surname'] }}</td>
+                                <td>{{ user['flights_number'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm">
                     <h4> Voli per anno </h4>
-                    {% for flight in flights_per_year %}
-                        <p> {{ flight['years'] }} {{ flight['flights_number'] }}  </p>
-                    {% endfor %}
+                    <table class="table table-hover">
+                        <thead class="table-warning">
+                        <tr>
+                            <th scope="col">Anno</th>
+                            <th scope="col">Voli</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for flight in flights_per_year %}
+                            <tr>
+                                <th scope="row">{{ flight['years'] }}</th>
+                                <td>{{ flight['flights_number'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm">
                     <h4> Media prenotazioni per cliente per anno</h4>
-                    {% for avg in avg_booking_per_year %}
-                        <p> {{ avg['years'] }} {{ avg['average'] }}  </p>
-                    {% endfor %}
+                    <table class="table table-hover">
+                        <thead class="table-info">
+                        <tr>
+                            <th scope="col">Anno</th>
+                            <th scope="col">Media</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for avg in avg_booking_per_year %}
+                            <tr>
+                                <th scope="row">{{ avg['years'] }}</th>
+                                <td>{{ avg['average'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="row">
                 <div class="col-sm">
                     <h4> Aerei con numero posti prenotati dal 2000 ad oggi </h4>
-                    {% for plane in plane_with_places %}
-                        <p> {{ plane['plane_code'] }} {{ plane['numero_posti'] }}  </p>
-                    {% endfor %}
+                    <table class="table table-hover">
+                        <thead class="table-warning">
+                        <tr>
+                            <th scope="col">Aereo</th>
+                            <th scope="col">Totale</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                       {% for plane in plane_with_places %}
+                            <tr>
+                                <th scope="row">{{ plane['plane_code'] }}</th>
+                                <td>{{ plane['numero_posti'] }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
