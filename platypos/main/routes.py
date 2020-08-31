@@ -13,7 +13,15 @@ def homepage():
         dynamiclist = connection.execute(select([airports.c.province]). \
                                          order_by(airports.c.province). \
                                          distinct())
-    return render_template('home.html', active_menu=0, dynamiclist=dynamiclist, logged_in=current_user.is_authenticated)
+
+        flights_presents = connection.execute(
+            "SELECT  f.flight_code as flight_code ,a1.name as departure_airport , a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time,"
+            " a1.province as province_from, a2.province as province_to, f.plane_code as plane_code, p.seats as seats"
+            " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
+            " WHERE f.departure_time > CURRENT_DATE"
+            " LIMIT 5")
+    return render_template('home.html', active_menu=0, dynamiclist=dynamiclist, logged_in=current_user.is_authenticated,
+                           flights_presents=flights_presents)
 
 
 @main.route('/prenotazione', methods=['GET', 'POST'])
@@ -54,7 +62,7 @@ def book():
                 " SELECT  f.flight_code as flight_code ,a1.name as departure_airport , a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time, a1.province as province_from, a2.province as province_to, f.plane_code as plane_code, p.seats as seats"
                 " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
                 " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure"
-                )
+            )
             # Vengono prelevati i vari attributi da mostrare all'utente per poter decidere il volo da prenotare
             # Viene utilizzato l'isolamento SERIALIZABLE a causa della selezione del posto
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
