@@ -172,7 +172,7 @@ def form_register():
     if current_user.is_authenticated:
         return redirect(url_for('users_account.profile'))
     if request.method == 'POST':
-        # # Ricerca dell'utente registrato, SERIALIZABLE evita di avere campi nuovi non letti
+        # Ricerca dell'utente registrato, SERIALIZABLE evita di avere campi nuovi non letti
         with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
             results = connection.execute(select([users]). \
                                          where(users.c.email == request.form['new_email'].lower()))

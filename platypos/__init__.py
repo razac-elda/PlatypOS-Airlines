@@ -5,6 +5,7 @@ from flask_login import LoginManager, current_user
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'sonounachiavesegreta'
 
+# Inizializzazione  di flask-login e flask-bcrypt
 login_manager = LoginManager()
 login_manager.init_app(app)
 
