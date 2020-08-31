@@ -218,7 +218,7 @@ def statistics():
             # Citta piu visitate
             s = text(
                 "SELECT a.province, count(f.flight_code) as numero_voli"
-                " FROM airports a JOIN flights f ON a.airport_id=f.arrival_airport "
+                " FROM airports a JOIN flights f ON a.airport_id=f.arrival_airport JOIN bookings b ON b.flight_code=f.flight_code"
                 " GROUP BY a.province"
                 " ORDER BY numero_voli DESC"
                 " LIMIT 10"
