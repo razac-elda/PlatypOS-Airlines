@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block contenuto %}
-    <div class="card row-space">
+    <div class="card shadow-sm bg-white rounded">
         <h5 class="card-header">
             Inserisci nuovo volo
         </h5>
@@ -114,14 +114,14 @@
                     <div class="row row-space">
                         <div class="col-sm">
                             <label for="Insert">Verificare correttezza dati!</label>
-                            <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>
+                            <button type="submit" class="btn btn-warning btn-block shadow-sm" id="Insert">Inserisci</button>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="card row-space">
+    <div class="card shadow-sm bg-white rounded row-space">
         <h5 class="card-header"> Inserisci aeroporto</h5>
         <div class="card-body">
             <form action="/utente/profilo/nuovo_aeroporto" method="POST">
@@ -147,13 +147,13 @@
                     </div>
                     <div class="col-sm">
                         <label for="Insert">Verificare correttezza dati!</label>
-                        <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>
+                        <button type="submit" class="btn btn-warning btn-block shadow-sm" id="Insert">Inserisci</button>
                     </div>
                 </div>
             </form>
         </div>
     </div>
-    <div class="card row-space">
+    <div class="card shadow-sm bg-white rounded row-space">
         <h5 class="card-header"> Inserisci nuovo aereo</h5>
         <div class="card-body">
             <form action="/utente/profilo/nuovo_aereo" method="POST">
@@ -168,7 +168,7 @@
                     </div>
                     <div class="col-sm">
                         <label for="Insert">Verificare correttezza dati!</label>
-                        <button type="submit" class="btn btn-warning btn-block" id="Insert">Inserisci</button>
+                        <button type="submit" class="btn btn-warning btn-block shadow-sm" id="Insert">Inserisci</button>
                     </div>
                 </div>
             </form>
@@ -176,10 +176,10 @@
     </div>
     <div class="row">
         <div class="col-sm row-space">
-            <a href="/utente/profilo/logout" class="btn btn-warning">Logout</a>
+            <a href="/utente/profilo/logout" class="btn btn-warning shadow-sm">Logout</a>
         </div>
         <div class="col-sm row-space">
-            <a href="/utente/profilo/statistiche" class="btn btn-warning">Statistiche</a>
+            <a href="/utente/profilo/statistiche" class="btn btn-warning shadow-sm">Statistiche</a>
         </div>
     </div>
 {% endblock contenuto %}

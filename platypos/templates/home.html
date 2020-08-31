@@ -3,7 +3,7 @@
     <!-- Script per disabilitare calendario -->
     <script src="{{ url_for('static', filename='js/datepicker_enabled_disabled.js') }}"></script>
     <!-- Ricerca voli -->
-    <div class="card">
+    <div class="card shadow bg-white rounded">
         <h5 class="card-header">
             Dove vuoi andare?
         </h5>
@@ -62,7 +62,7 @@
                     </div>
                     <div class="row row-space">
                         <div class="col-sm">
-                            <button type="submit" name="search" value="True" class="btn btn-warning btn-block">Cerca
+                            <button type="submit" name="search" value="True" class="btn btn-warning btn-block shadow-sm">Cerca
                             </button>
                             <input type="hidden" name="book_outbound" value="False"/>
                             <input type="hidden" name="book_return" value="False"/>
@@ -84,8 +84,10 @@
         <!-- Generazione risultati -->
 
     {% endif %}
-    <div class="card row-space">
-        <h3 class="card-header">Prossimi Voli</h3>
+    <div class="card shadow-sm bg-white rounded row-space">
+        <h5 class="card-header">
+            Prossimi Voli
+        </h5>
         <div class="card-body">
             {% for row in flights_presents %}
                 <div class="card row-space">
@@ -93,13 +95,14 @@
                         <div class="row row-space">
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="FromResult">Da:<br>{{ row['departure_airport'] }}, {{ row['departure_city'] }} ({{row['province_from'] }}) </label>
-
+                                    <label for="FromResult">Da:<br>{{ row['departure_airport'] }}, {{ row['departure_city'] }}
+                                        ({{ row['province_from'] }}) </label>
                                 </div>
                             </div>
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="ToResult">A:<br>{{ row['arrival_airport'] }}, {{ row['arrival_city'] }} ({{row['province_to'] }}) </label>
+                                    <label for="ToResult">A:<br>{{ row['arrival_airport'] }}, {{ row['arrival_city'] }}
+                                        ({{ row['province_to'] }}) </label>
                                 </div>
                             </div>
                             <div class="col-sm">

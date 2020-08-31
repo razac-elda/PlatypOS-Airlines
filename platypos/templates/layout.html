@@ -21,7 +21,7 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info">
+    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-info shadow-sm">
         <a class="navbar-brand" href="/">PlatypOS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText"
                 aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
@@ -38,9 +38,9 @@
             </ul>
             <div class="btn-group">
                 {% if logged_in %}
-                    <a href="/utente/profilo" class="btn btn-warning">Profilo</a>
+                    <a href="/utente/profilo" class="btn btn-warning shadow-sm">Profilo</a>
                 {% else %}
-                    <a href="/utente/autenticazione" class="btn btn-warning">Accedi / Registrati</a>
+                    <a href="/utente/autenticazione" class="btn btn-warning shadow-sm">Accedi / Registrati</a>
                 {% endif %}
             </div>
         </div>
@@ -51,7 +51,7 @@
         {% endblock contenuto %}
     </main>
     <!-- Footer -->
-    <footer class="footer">
+    <footer class="footer row-space">
         <div class="container">
             <span class="text-muted">PlatypOS airlines</span>
         </div>
