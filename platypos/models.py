@@ -67,7 +67,7 @@ airports = Table('airports', metadata,
 airplanes = Table('airplanes', metadata,
                   Column('plane_code', Integer, primary_key=True),
                   Column('seats', Integer, CheckConstraint('seats>0'), nullable=False),
-                )
+                  )
 
 flights = Table('flights', metadata,
                 Column('flight_code', Integer, primary_key=True),
