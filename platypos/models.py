@@ -42,7 +42,7 @@ class User(UserMixin):
 
 # Nome utente, password e DB da modificare in base alle esigenze
 uri = 'postgres+psycopg2://postgres:passwordsupersegreta@localhost:5432/platypos_airlines'
-engine = create_engine(uri, echo=True)
+engine = create_engine(uri)
 
 metadata = MetaData()
 
