@@ -198,6 +198,7 @@ def statistics():
         # Creazione statistiche
         # REPEATABLE READ per evitare che una riga cambi valore
         with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+            # Clienti fedeli
             s = text(
                 " SELECT u.name, u.surname, b.user_id , COUNT(*) as flights_number"
                 " FROM bookings b JOIN users u ON b.user_id = u.user_id"
@@ -206,6 +207,7 @@ def statistics():
                 " LIMIT 10"
             )
             top_clients = connection.execute(s)
+            # Voli per anno
             s = text(
                 " SELECT  CAST( date_part('year', departure_time)as int )  as years, count(*) as flights_number"
                 " FROM flights"
@@ -213,6 +215,16 @@ def statistics():
                 " ORDER BY years desc"
             )
             flights_per_year = connection.execute(s)
+            # Citta piu visitate
+            s = text(
+                "SELECT a.province, count(f.flight_code) as numero_voli"
+                " FROM airports a JOIN flights f ON a.airport_id=f.arrival_airport "
+                " GROUP BY a.province"
+                " ORDER BY numero_voli DESC"
+                " LIMIT 10"
+            )
+            top_cities = connection.execute(s)
+            # Media prenotazioni per cliente per anno
             s = text(
                 " SELECT CAST( date_part('year', f.departure_time)as int ) as years ,"
                 " CASE WHEN count(distinct b.user_id) > 0 THEN CAST(count(b.booking_id)AS DOUBLE PRECISION)/CAST(count(distinct b.user_id)AS DOUBLE PRECISION)"
@@ -222,6 +234,7 @@ def statistics():
                 " GROUP BY years"
             )
             avg_booking_per_year = connection.execute(s)
+            # Aerei con numero posti prenotati dal 2000 ad oggi
             s = text(
                 "SELECT f1.plane_code, count(f1.plane_code) as numero_posti"
                 " FROM airplanes a1 JOIN flights f1 ON a1.plane_code=f1.plane_code "
@@ -233,5 +246,5 @@ def statistics():
         return render_template('statistiche.html', title='Statistiche', logged_in=current_user.is_authenticated,
                                top_clients=top_clients, flights_per_year=flights_per_year,
                                avg_booking_per_year=avg_booking_per_year,
-                               plane_with_places=plane_with_places)
+                               plane_with_places=plane_with_places, top_cities=top_cities)
     return redirect(url_for('users_account.profile'))

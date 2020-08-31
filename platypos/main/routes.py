@@ -8,18 +8,23 @@ main = Blueprint('main', __name__, template_folder='templates', static_folder='s
 @main.route('/')
 @main.route('/home')
 def homepage():
-    # Query per ottenere le provincie degli aeroporti
+    # Dato che dynamiclist viene usata solo per comodità grafica non serve un alto livello di isolamento
     with engine.connect().execution_options(isolation_level="READ COMMITTED") as connection:
+        # Query per ottenere le provincie degli aeroporti
         dynamiclist = connection.execute(select([airports.c.province]). \
                                          order_by(airports.c.province). \
                                          distinct())
-
-        flights_presents = connection.execute(
-            "SELECT  f.flight_code as flight_code ,a1.name as departure_airport ,a1.city as departure_city, a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time,"
-            " a1.province as province_from, a2.province as province_to, a2.city as arrival_city, f.plane_code as plane_code, p.seats as seats"
+    # Tramite REPEATABLE READ ci possono essere fantasmi ma questa query è solo di visualizzazione
+    # al momento della vera ricerca verranno visualizzati eventuali nuovi voli
+    with engine.connect().execution_options(isolation_level="REPEATABLE READ") as connection:
+        # Elenco prossimi 5 voli
+        s = text(
+            " SELECT  f.flight_code as flight_code ,a1.name as departure_airport ,a1.city as departure_city, a2.name as arrival_airport , f.departure_time as departure_time, "
+            " f.arrival_time as arrival_time, a1.province as province_from, a2.province as province_to, a2.city as arrival_city, f.plane_code as plane_code, p.seats as seats"
             " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
             " WHERE f.departure_time > CURRENT_DATE"
             " LIMIT 5")
+        flights_presents = connection.execute(s)
     return render_template('home.html', active_menu=0, dynamiclist=dynamiclist, logged_in=current_user.is_authenticated,
                            flights_presents=flights_presents)
 
@@ -58,15 +63,15 @@ def book():
                     flyDepDate = request.form['fly_return_date']
         # Questa sezione viene visualizzata una volta per solo andata e due volte per andata e ritono
         if request.form['book_return'] == 'False':
-            s = text(
-                "SELECT  f.flight_code as flight_code ,a1.name as departure_airport ,a1.city as departure_city, a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time,"
-                " a1.province as province_from, a2.province as province_to, a2.city as arrival_city, f.plane_code as plane_code, p.seats as seats"
-                " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
-                " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure"
-            )
             # Vengono prelevati i vari attributi da mostrare all'utente per poter decidere il volo da prenotare
             # Viene utilizzato l'isolamento SERIALIZABLE a causa della selezione del posto
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
+                s = text(
+                    "SELECT  f.flight_code as flight_code ,a1.name as departure_airport ,a1.city as departure_city, a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time,"
+                    " a1.province as province_from, a2.province as province_to, a2.city as arrival_city, f.plane_code as plane_code, p.seats as seats"
+                    " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
+                    " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure"
+                )
                 outbound = connection.execute(s, provincefrom=flyFrom, provinceto=flyTo, departure=flyDepDate)
                 planned_flights = connection.execute(select([flights.c.flight_code.distinct()]). \
                                                      order_by(flights.c.flight_code))
@@ -104,7 +109,7 @@ def book():
                                        logged_in=current_user.is_authenticated,
                                        permission=permission)
         else:
-            # Inserimento di sola andata oppure ritorno dell'andata con ritorno
+            # Inserimento di sola andata oppure ritorno dell'andata con ritorno con split posti
             seat_list = request.form['seats'].split('-')
             with engine.connect().execution_options(isolation_level="SERIALIZABLE") as connection:
                 connection.execute(bookings.insert(), seat_number=seat_list[1], seat_column=seat_list[0],
