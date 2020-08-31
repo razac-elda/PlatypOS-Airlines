@@ -70,9 +70,10 @@ def book():
                     "SELECT  f.flight_code as flight_code ,a1.name as departure_airport ,a1.city as departure_city, a2.name as arrival_airport , f.departure_time as departure_time, f.arrival_time as arrival_time,"
                     " a1.province as province_from, a2.province as province_to, a2.city as arrival_city, f.plane_code as plane_code, p.seats as seats"
                     " FROM airports a1 JOIN flights f ON a1.airport_id = f.departure_airport JOIN airports a2 ON a2.airport_id = f.arrival_airport JOIN airplanes p ON f.plane_code=p.plane_code"
-                    " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure AND f.flight_code NOT IN ( SELECT f.flight_code"
-                    " FROM bookings b RIGHT JOIN flights f ON b.flight_code = f.flight_code JOIN airplanes a1 ON f.plane_code = a1.plane_code"
-                    " GROUP BY f.flight_code, a1.seats"
+                    " WHERE a1.province=:provincefrom AND a2.province=:provinceto AND date(f.departure_time)=:departure AND f.flight_code NOT IN ( SELECT f1.flight_code"
+                    " FROM bookings b RIGHT JOIN flights f1 ON b.flight_code = f1.flight_code JOIN airplanes a1 ON f.plane_code = a1.plane_code"
+                    " WHERE f.flight_code=f1.flight_code"
+                    " GROUP BY f1.flight_code, a1.seats"
                     " HAVING count(b.booking_id) >= a1.seats)"
 
                 )
